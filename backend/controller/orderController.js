@@ -146,7 +146,10 @@ exports.updateOrderStatus = asyncHandler(async(req,res,next)=>{
     product.stock -= item.quantity;
     await product.save({ validateBeforeSave: false });
   }
-  order.orderStatus = 'Delivered'
+  order.orderStatus = req.body.status
+  if(req.body.status ==='Delivered'){
+    order.deliveredAt = Date.now()
+  }
   await order.save()
 
   res.status(200).json({
