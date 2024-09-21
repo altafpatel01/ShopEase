@@ -20,19 +20,19 @@ exports.newOrder = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler('No order items provided', 400));
   }
 
-  // Check for stock availability of each product in the order
-  for (const item of orderItems) {
-    const product = await Product.findById(item.product);
-    if (!product) {
-      return next(new ErrorHandler(`Product not found: ${item.name}`, 404));
-    }
+  // // Check for stock availability of each product in the order
+  // for (const item of orderItems) {
+  //   const product = await Product.findById(item.product);
+  //   if (!product) {
+  //     return next(new ErrorHandler(`Product not found: ${item.name}`, 404));
+  //   }
 
-    if (product.stock < item.quantity) {
-      return next(
-        new ErrorHandler(`Insufficient stock for product: ${item.name}`, 400)
-      );
-    }
-  }
+  //   if (product.stock < item.quantity) {
+  //     return next(
+  //       new ErrorHandler(`Insufficient stock for product: ${item.name}`, 400)
+  //     );
+  //   }
+  // }
 
   // Create new order in the database
   const order = await Order.create({
@@ -47,12 +47,12 @@ exports.newOrder = asyncHandler(async (req, res, next) => {
     user: req.user._id, // Assuming user is authenticated
   });
 
-  // Reduce stock of ordered products
-  for (const item of orderItems) {
-    const product = await Product.findById(item.product);
-    product.stock -= item.quantity;
-    await product.save({ validateBeforeSave: false });
-  }
+  // // Reduce stock of ordered products
+  // for (const item of orderItems) {
+  //   const product = await Product.findById(item.product);
+  //   product.stock -= item.quantity;
+  //   await product.save({ validateBeforeSave: false });
+  // }
 
   res.status(201).json({
     success: true,
@@ -117,4 +117,40 @@ exports.deleteOrder = asyncHandler(async(req,res)=>{
   // await Order.findByIdAndDelete(req.params.id);
   await order.deleteOne()
   res.status(200).json({ message: 'Order deleted successfully and stock updated' });
+})
+
+exports.updateOrderStatus = asyncHandler(async(req,res,next)=>{
+  const order = await Order.findById(req.params.id)
+  if(!order){
+    return next(new ErrorHandler('order not founded',404))
+  }
+  if(order.orderStatus ==='Delivered'){
+    return next(new ErrorHandler('order is already is delivered',400))
+  }
+  // Check for stock availability of each product in the order
+  for (const item of order.orderItems) {
+    const product = await Product.findById(item.product);
+    if (!product) {
+      return next(new ErrorHandler(`Product not found: ${item.name}`, 404));
+    }
+
+    if (product.stock < item.quantity) {
+      return next(
+        new ErrorHandler(`Insufficient stock for product: ${item.name}`, 400)
+      );
+    }
+  }
+  // Reduce stock of ordered products
+  for (const item of order.orderItems) {
+    const product = await Product.findById(item.product);
+    product.stock -= item.quantity;
+    await product.save({ validateBeforeSave: false });
+  }
+  order.orderStatus = 'Delivered'
+  await order.save()
+
+  res.status(200).json({
+    success:true,
+    order
+  })
 })
