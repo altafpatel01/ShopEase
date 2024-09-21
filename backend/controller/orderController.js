@@ -59,3 +59,62 @@ exports.newOrder = asyncHandler(async (req, res, next) => {
     order,
   });
 });
+// get single order
+exports.getSingleOrder = asyncHandler(async(req, res,next)=>{
+  const order = await Order.findById(req.params.id).populate('user','name email')
+   if(!order){
+    return next(new ErrorHandler('order not found',400))
+   }
+
+   res.status(200).json({
+    succes:true,
+    order
+   })
+
+})
+
+exports.totalValue =asyncHandler(async(req,res ,next)=>{
+  const orders = await Order.find()
+if(!orders){
+  return next(new ErrorHandler('No order is place',404))
+}
+    const totalMoney = orders.reduce((acc, order)=> acc+order.totalPrice,0)
+    res.status(200).json({
+      success:true,
+      totalMoney
+    })
+})
+// get all order of logged in user
+exports.myOrders= asyncHandler(async(req,res,next)=>{
+
+  const orders = await Order.find({user:req.user.id})
+
+  if(!orders){
+    return next(new ErrorHandler("There is no order ",400 ))
+  }
+  res.status(200).json({
+    success:true,
+    orders
+  })
+
+})
+
+// get total amount order are requested
+
+exports.deleteOrder = asyncHandler(async(req,res)=>{
+  const order = await Order.findById(req.params.id).populate('orderItems.product')
+  if (!order) {
+    return next(new ErrorHandler('order not found',400)); // Handle not found case
+  }
+   for(const item of order.orderItems){
+    const product = item.product
+
+    await Product.findByIdAndUpdate(product._id, {
+      $inc: { stock: item.quantity }, // Increment the stock by the quantity ordered
+    });
+  }
+
+  // await Order.findByIdAndDelete(req.params.id);
+  await order.deleteOne()
+  res.status(200).json({ message: 'Order deleted successfully and stock updated' });
+})
