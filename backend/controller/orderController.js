@@ -106,13 +106,13 @@ exports.deleteOrder = asyncHandler(async(req,res)=>{
   if (!order) {
     return next(new ErrorHandler('order not found',400)); // Handle not found case
   }
-   for(const item of order.orderItems){
-    const product = item.product
+  //  for(const item of order.orderItems){
+  //   const product = item.product
 
-    await Product.findByIdAndUpdate(product._id, {
-      $inc: { stock: item.quantity }, // Increment the stock by the quantity ordered
-    });
-  }
+  //   await Product.findByIdAndUpdate(product._id, {
+  //     $inc: { stock: item.quantity }, // Increment the stock by the quantity ordered
+  //   });
+  // }
 
   // await Order.findByIdAndDelete(req.params.id);
   await order.deleteOne()
