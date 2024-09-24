@@ -1,10 +1,23 @@
 // import logo from './logo.svg';
-import './App.css';
-import './main.css'
-
-function App() {
+import "./App.css";
+import "./main.css";
+import Navbar from "./components/Navbar";
+import Home from './components/Home'
+import About from './components/About'
+import { Fragment } from "react";
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';function App() {
   return (
-   <h1 className='text-red-500 capitalize'>hello jee</h1>
+    <Fragment>
+        <Router>
+          <Navbar/>
+            <Routes>
+                <Route path="/" exact element={<Home/>} />
+                <Route path="/about" element={<About/>} />
+              
+            </Routes>
+        </Router>
+    
+    </Fragment>
   );
 }
 

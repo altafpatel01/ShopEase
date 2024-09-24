@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.your-class::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid white;
+  
+  color:red;
+  clip-path: polygon(100% 80%, 0% 100%, 100% 100%);
+  background: white; /* Adjust as needed */
+  z-index: 20; /* Ensure it's above other content */
+}

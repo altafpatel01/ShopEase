@@ -29,11 +29,11 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
   });
 });
 exports.getAllPorducts = asyncHandler(async (req, res, next) => {
-  const resultPerPage =5
+  const resultPerPage =9
   const apiFeature =new ApiFeature(Product.find(),req.query).search().filter().pagination(resultPerPage)
   const products = await apiFeature.query;
   res.status(200).json({
-    message: "All product",
+    message: "All products",
     products,
   });
 });
