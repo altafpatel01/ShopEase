@@ -1,34 +1,49 @@
-import React from 'react'
-import Heading from './Heading'
-// import { Link } from 'react-router-dom'
-import { FaFacebook, FaInstagram, FaQrcode, FaTwitter } from 'react-icons/fa'
+import React from 'react';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {FaInstagram,FaTwitter,FaFacebook,FaQrcode} from 'react-icons/fa';
 
-function Footer() {
+const Footer = () => {
   return (
-    <div className='w-7xl flex-shrink-1  h-60 flex justify-around items-center bg-soft-pastel-blue mobile:px-2 md:px-5 px-20 mt-10' >
-       <div className=' flex flex-col text-xl mobile:gap-3 gap-6 justify-start font-bold items-center text-center text-white'>
-       <h2>Download Our App</h2>
-       <FaQrcode className='w-24 h-24 mobile:w-8 mobile:h-8'></FaQrcode>
-       
-       </div>
-       <div className='flex flex-col  items-center font-sans justify-start  text-center text-white'>
-       <Heading level={1} title='ShopEase.' className={'text-white '}/>
-       <p>High quality is our first priority</p>
-       <p>copyright 2024 Altaf Patel</p>
-       </div>
+    <footer className="bg-gray-800 text-white mt-8 py-8">
+      <div className="container mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Download Our App */}
+        <div className="text-center sm:text-left">
+          <h4 className="text-lg font-semibold mb-4">Download Our App</h4>
+          <div className="flex justify-center sm:justify-start">
+            {/* QR Code or App Store Links */}
+            <FaQrcode   className="w-24 h-24" />
+          </div>
+        </div>
 
-       <div className=' flex flex-col text-xl font-sans  items-center justify-start  mobile:gap-0 gap-2 text-center text-white'>
-        <h2 className='text-xl font-sans font-bold'>Follow Us</h2>
-        <a href='nln' className=' flex gap-1 group items-center'><FaInstagram className='w-5 h-5 group-hover:fill-red-700'></FaInstagram>  Intagram</a>
-        <a href='nln' className=' flex gap-1 group items-center'><FaFacebook className='w-5 h-5 group-hover:fill-blue-700'></FaFacebook>  FaceBook</a>
-        <a href='nln' className=' flex gap-1 group items-center'><FaTwitter className='w-5 h-5 group-hover:fill-blue-700'></FaTwitter>  Twitter</a>
+        {/* ShopEase Branding */}
+        <div className="text-center">
+          <h2 className="text-xl font-bold">ShopEase</h2>
+          <p className="text-gray-400 mt-2">
+            High quality is our first priority
+          </p>
+          <p className="text-gray-400 mt-1">
+            &copy; 2024 Altaf Patel
+          </p>
+        </div>
 
-       </div>
+        {/* Follow Us */}
+        <div className="text-center sm:text-right">
+          <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
+          <div className="flex justify-center sm:justify-end space-x-4">
+            <a href="https://www.instagram.com" className="text-gray-400 hover:text-white">
+              <FaInstagram className='w-5 h-5' />
+            </a>
+            <a href="https://www.facebook.com" className="text-gray-400 hover:text-white">
+            <FaFacebook className='w-5 h-5' />
+            </a>
+            <a href="https://www.twitter.com" className="text-gray-400 hover:text-white">
+            <FaTwitter className='w-5 h-5' />
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
 
-
-        
-    </div>
-  )
-}
-
-export default Footer
+export default Footer;

@@ -1,22 +1,35 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import logo from '../logo.svg';
 import { FaSearch } from 'react-icons/fa'; // Import the search icon
 import { Link } from 'react-router-dom';
+// import { fetchProducts } from '../Reducers/Reducers';
+import {fetchSearchProducts} from '../Reducers/searchProduct'
+import { useDispatch } from 'react-redux';
+// import e from 'express';
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
+  
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-
+const handleSearchQuery = (e)=>{
+  setSearchQuery(e.target.value)
+}
   const handleSearch = (e) => {
     e.preventDefault();
     // Handle search logic here
     if (searchQuery === null || searchQuery.trim() === '') {
         return; // Do nothing if searchQuery is null or empty
     } else {
-        console.log(searchQuery);
+     const trimsearchQuery = searchQuery.toLowerCase().trim()
+      dispatch(fetchSearchProducts( trimsearchQuery))
+      navigate(`/search/results`);
         // Place your search logic here
     }
 };
@@ -50,7 +63,7 @@ const Navbar = () => {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) =>setSearchQuery(e.target.value)}
+                onChange={handleSearchQuery}
                 placeholder="Search..."
                 className="flex-1 placeholder:text-white text-white bg-transparent border-b border-white focus:outline-none "
               />

@@ -17,3 +17,26 @@
   background: white; /* Adjust as needed */
   z-index: 20; /* Ensure it's above other content */
 }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Start transparent */
+  }
+  to {
+    opacity: 1; /* Fully visible */
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-in-out; /* Run the fade-in animation */
+}

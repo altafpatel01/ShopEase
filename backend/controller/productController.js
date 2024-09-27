@@ -29,12 +29,15 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
   });
 });
 exports.getAllPorducts = asyncHandler(async (req, res, next) => {
-  const resultPerPage =9
+  const resultPerPage =process.env.RESULT_PER_PAGE
+  const productCount = await Product.countDocuments();
+
   const apiFeature =new ApiFeature(Product.find(),req.query).search().filter().pagination(resultPerPage)
   const products = await apiFeature.query;
   res.status(200).json({
     message: "All products",
     products,
+    productCount
   });
 });
 

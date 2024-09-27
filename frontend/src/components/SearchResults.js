@@ -1,22 +1,27 @@
-import React, { Fragment } from "react";
-import StarRatings from "react-star-ratings";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-
-function Products() {
-  const { products } = useSelector((state) => state.getProducts);
-  console.log(products);
-  // const options = {
-  //   starRatedColor: "#ffd700",
-  //   numberOfStars: 5,
-  //   name: "rating",
-  //   starDimension: "24px",
-  //   starSpacing: "2px",
-  // };
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom';
+import StarRatings from 'react-star-ratings';
+import Loader from './Loading';
+import ErrorPage from './ErrorPage';
+function SearchResults() {
+    const {products,isLoading,error} = useSelector((state)=>state.getSearchProducts)
+    console.log(products)
   return (
-    <Fragment>
+    <>
+    <div  className="w-7xl  mx-auto">
+      {/* Show loading component when data is loading */}
+      {isLoading && <Loader />}
       
-      {products.map((product) => {
+      {/* Show error component when there's an error */}
+      {error && <ErrorPage message={error.message || "An error occurred while fetching products."} />}
+      
+      {/* Render products when data is available and there are no errors */}
+      {!isLoading && !error && (
+        <div className="max-w-4xl mx-auto">
+          {/* <Heading title={"Featured Products"} level={2} /> */}
+          <div className="flex mt-10 justify-center items-center gap-4 flex-wrap">
+          {products.map((product) => {
         return (
           <Link
             to={`/product/${product._id}`}
@@ -48,8 +53,12 @@ function Products() {
           </Link>
         );
       })}
-    </Fragment>
-  );
+          </div>
+        </div>
+      )}
+    </div>
+      </>
+  )
 }
 
-export default Products;
+export default SearchResults

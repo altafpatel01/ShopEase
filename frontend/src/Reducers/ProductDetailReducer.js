@@ -3,39 +3,39 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
+export const fetchProductDetails = createAsyncThunk('product/fetchProductsDetails', async (id) => {
   try {
-    const response = await axios.get('/api/v1/products'); // Adjust the URL as necessary
-    return response.data; // Return the products directly
+    const response = await axios.get(`/api/v1/product/${id}`); // Adjust the URL as necessary
+    return response.data; // Return the product directly
   } catch (error) {
     // Throw a new error to be handled by the extraReducers
-    throw new Error(error.response.data.message || 'Failed to fetch products');
+    throw new Error(error.response.data.message || 'Failed to fetch product');
   }
 });
 
 
 const initialState = {
-  products: [],
+  product: {},
   isLoading: false,
   error: null,
 };
 
-const productsSlice = createSlice({
-  name: 'products',
+const ProductDetailsSlice = createSlice({
+  name: 'product',
   initialState,
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state) => {
+      .addCase(fetchProductDetails.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchProducts.fulfilled, (state, action) => {
+      .addCase(fetchProductDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.products = action.payload.products;
+        state.product = action.payload.product;
         state.message = action.payload.message;
         state.productCount = action.payload.productCount;
       })
-      .addCase(fetchProducts.rejected, (state, action) => {
+      .addCase(fetchProductDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
         
@@ -43,4 +43,4 @@ const productsSlice = createSlice({
   },
 });
 
-export default productsSlice.reducer;
+export default ProductDetailsSlice.reducer;
