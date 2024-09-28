@@ -5,8 +5,9 @@ import StarRatings from 'react-star-ratings';
 import Loader from './Loading';
 import ErrorPage from './ErrorPage';
 function SearchResults() {
+  // const {products,isLoading,error}= useSelector((state)=>state.getProducts)
     const {products,isLoading,error} = useSelector((state)=>state.getSearchProducts)
-    console.log(products)
+    
   return (
     <>
     <div  className="w-7xl  mx-auto">
@@ -17,11 +18,11 @@ function SearchResults() {
       {error && <ErrorPage message={error.message || "An error occurred while fetching products."} />}
       
       {/* Render products when data is available and there are no errors */}
-      {!isLoading && !error && (
+      {!isLoading && !error&& (
         <div className="max-w-4xl mx-auto">
           {/* <Heading title={"Featured Products"} level={2} /> */}
           <div className="flex mt-10 justify-center items-center gap-4 flex-wrap">
-          {products.map((product) => {
+          {products.length>0? products.map((product) => {
         return (
           <Link
             to={`/product/${product._id}`}
@@ -51,8 +52,9 @@ function SearchResults() {
               </div>
             </div>
           </Link>
+          
         );
-      })}
+      }):<h1 className='mx-auto text-red-700 text-2xl mobile:text-xl'>No product found</h1>}
           </div>
         </div>
       )}

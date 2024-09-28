@@ -5,6 +5,7 @@ import logo from '../logo.svg';
 import { FaSearch } from 'react-icons/fa'; // Import the search icon
 import { Link } from 'react-router-dom';
 // import { fetchProducts } from '../Reducers/Reducers';
+
 import {fetchSearchProducts} from '../Reducers/searchProduct'
 import { useDispatch } from 'react-redux';
 // import e from 'express';
@@ -29,6 +30,7 @@ const handleSearchQuery = (e)=>{
     } else {
      const trimsearchQuery = searchQuery.toLowerCase().trim()
       dispatch(fetchSearchProducts( trimsearchQuery))
+      // dispatch(fetchProducts(`?keyword=${trimsearchQuery}`))
       navigate(`/search/results`);
         // Place your search logic here
     }
@@ -42,16 +44,16 @@ const handleSearchQuery = (e)=>{
               <img className="h-16 w-16 " src={logo} alt="ShopEase Logo" />
             </div>
             <div className="hidden md:flex  ">
-              <Link to="/" className="text-white md:ml-4 hover:bg-gray-700 px-3 py-1 rounded-md text-sm font-medium">
+              <Link to="/" className="text-white md:ml-4 hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
                 Home
               </Link>
-              <Link to="/about" className="text-white hover:bg-gray-700 px-3 py-1 rounded-md text-sm font-medium">
+              <Link to="/about" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
                 About
               </Link>
-              <Link to="/shop" className="text-white hover:bg-gray-700 px-3 py-1 rounded-md text-sm font-medium">
+              <Link to="/shop" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
                 Shop
               </Link>
-              <Link to="/contact" className="text-white hover:bg-gray-700 px-3 py-1 rounded-md text-sm font-medium">
+              <Link to="/contact" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
                 Contact
               </Link>
             </div>
@@ -75,10 +77,10 @@ const handleSearchQuery = (e)=>{
 
           {/* Sign In and Sign Up Links */}
           <div className="hidden md:flex space-x-2">
-            <a href="/signin" className="text-white hover:bg-gray-700 px-1 py-2 rounded-md text-sm font-medium">
+            <a href="/signin" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-2 rounded-md text-sm font-medium">
               Sign In
             </a>
-            <a href="/signup" className="text-white hover:bg-gray-700 px-1 py-2 rounded-md text-sm font-medium">
+            <a href="/signup" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-2 rounded-md text-sm font-medium">
               Sign Up
             </a>
           </div>
@@ -101,7 +103,7 @@ const handleSearchQuery = (e)=>{
 
        {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white w-1/2 h-1/2   absolute transition-all duration-500 ease-linear top-16 right-0 z-40 ">
+        <div className="md:hidden  bg-white w-1/2 h-1/2  ${} absolute transition-all duration-500 ease-linear top-16 right-0 z-40 ">
           <Link to="/"  className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm">
                 Home
               </Link>

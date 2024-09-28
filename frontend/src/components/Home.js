@@ -14,7 +14,7 @@ function Home() {
   return (
     <>
     <Banner scrollToContainer={scrollToContainer}/>
-    <Product containerRef={containerRef}/>
+    <Product containerRef={containerRef} scrollToContainer={scrollToContainer}/>
     <Footer/>
    
     </>
