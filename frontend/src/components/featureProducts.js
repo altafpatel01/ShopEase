@@ -24,7 +24,7 @@ function Product({ containerRef}) {
   );
 
   useEffect(() => {
-    dispatch(fetchProducts({keyword:'',page:1,priceRange:[0,5000]}));
+    dispatch(fetchProducts({keyword:'',page:1}));
   }, [dispatch]);
 
   // useEffect(() => {

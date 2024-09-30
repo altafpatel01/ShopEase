@@ -28,6 +28,7 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
+  
   const resultPerPage = process.env.RESULT_PER_PAGE || 12;
   const productCount = await Product.countDocuments();
 
@@ -40,7 +41,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
   let filtersProductCounts = products.length;
 
   // Now apply pagination and execute the paginated query
-  apiFeature.pagination(resultPerPage);
+   apiFeature.pagination(resultPerPage);
   products = await apiFeature.query;
 
   res.status(200).json({

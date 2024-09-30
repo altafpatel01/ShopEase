@@ -45,7 +45,7 @@ function Product() {
   };
 
   const handleFilters = () => {
-    dispatch(fetchProducts({ keyword, page, priceRange }));
+    dispatch(fetchProducts({ keyword, page, priceRange, categories,rating })); // Pass categories array
   };
   const handlePriceChange = (value) => {
     setPriceRange(value);
@@ -57,6 +57,8 @@ function Product() {
   useEffect(() => {
     dispatch(fetchProducts({ keyword, page }));
   }, [dispatch, keyword, page]);
+
+
   const { isLoading, error, filtersProductCounts } = useSelector(
     (state) => state.getProducts
   );
@@ -194,13 +196,13 @@ function Product() {
               {openFilters ? (
                 <button
                   onClick={toogleFilterbar}
-                  className=" items-center bg-blue-600  text-white rounded-md px-2 py-1 font-serif absolute left-5 -top-7 flex "
+                  className=" items-center bg-blue-600  text-white rounded-md px-2 py-1 font-serif absolute left-7 -top-7 flex "
                 >
                   Apply <FaFilter className="w-3 h-3 ml-2 fill-white" />
                 </button>
               ) : (
                 <>
-                  <div className="w-full p-4 bg-white  rounded-lg shadow-md mb-4 md:w-64">
+                  <div className="mobile:w-dvw mobile:h-full p-4 bg-white  rounded-lg shadow-md mb-4 md:w-64">
                     <h2 className="text-lg font-semibold flex items-center text-gray-700 border-b pb-2 mb-4">
                       Advanced Filters{" "}
                       <MdOutlineCancel

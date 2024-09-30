@@ -5,16 +5,14 @@ import axios from "axios";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async ({keyword="",page=1,priceRange=[0,5000]}) => {
+  async ({keyword="",page=1,priceRange=[0,5000],categories=[] , rating=0}) => {
     try {
      
-      // if(!keyword&&!page&&priceRange){
-      //   let link =`/api/v1/products?keyword`
-      // const response = await axios.get(link)
-      // return response.data
-
-      // }
-      let link =`/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${priceRange[0]}&price[lte]=${priceRange[1]}`
+      let link =`/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${priceRange[0]}&price[lte]=${priceRange[1]}&rating[gte]=${rating}`
+      if (categories.length > 0) {
+        link += `&categories=${categories.join(",")}`; // Join selected categories into a comma-separated string
+        
+      }
       const response = await axios.get(link)
       return response.data
     } catch (error) {
