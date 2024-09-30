@@ -1,78 +1,50 @@
-// import React, { useEffect } from "react";
-import { useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
+import React, { Fragment } from "react";
+import StarRatings from "react-star-ratings";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-import React, { useEffect } from "react";
-import Heading from "./Heading";
-import Products from "./Products";
-import { useDispatch, useSelector } from "react-redux";
-// import { useSelector } from "react-redux";
-import { fetchProducts } from "../Reducers/Reducers";
-import Loading from "./Loading";
-import ErrorPage from "./ErrorPage";
-
-function Product({ containerRef,scrollToContainer }) {
-  const [page, setPage] = useState(1);
-  //   const dispatch = useDispatch();
-  const handleChange = (event, value) => {
-    event.preventDefault(); // Prevent the default action
-    scrollToContainer()
-    setPage(value); // Update the page state
-  };
-
-  const dispatch = useDispatch();
-
-  // Access loading and error state from the Redux store
-  const { isLoading, error } = useSelector((state) => state.getProducts);
-
-  useEffect(() => {
-    dispatch(fetchProducts(page));
-  }, [dispatch, page]);
-
-  // useEffect(() => {
-  //   console.log("Current State:", { isLoading, error });
-  //   dispatch(fetchProducts());
-  // }, [dispatch,error,isLoading]);
-
+function Products() {
+  const { products } = useSelector((state) => state.getProducts);
+  console.log(products);
+  
   return (
-    <div ref={containerRef} className="w-7xl ">
-      {/* Show loading component when data is loading */}
-      {isLoading && <Loading />}
-
-      {/* Show error component when there's an error */}
-      {error && (
-        <ErrorPage
-          message={
-            error.message || "An error occurred while fetching products."
-          }
-        />
-      )}
-
-      {/* Render products when data is available and there are no errors */}
-      {!isLoading && !error && (
-        <>
-          <div className="max-w-4xl mx-auto">
-            <Heading title={"Featured Products"} level={2} />
-            <div className="flex mt-10 justify-center items-center gap-4 flex-wrap">
-              <Products />
-            </div>
-          </div>
-          <div className="flex justify-center my-8 ">
-            <Stack spacing={2}>
-              <Pagination
-                count={5}
-                page={page}
-                variant="outlined"
-                shape="rounded"
-                onChange={handleChange}
+    <Fragment>
+      
+      {products.map((product) => {
+        return (
+          <Link
+            to={`/product/${product._id}`}
+            key={product._id}
+            className="block "
+          >
+            <div className="w-44 mobile:w-40 mobile:h-56 relative group bg-light-gray h-64 rounded-lg overflow-hidden shadow-lg">
+              <img
+                src={product.images[0].url}
+                className="w-full h-full object-cover rounded-t-lg transition-all duration-300 ease-linear group-hover:scale-x-105 group-hover:scale-y-105"
+                alt={product.name}
               />
-            </Stack>
-          </div>
-        </>
-      )}
-    </div>
+              <div className=" absolute bottom-0 pl-2 text-white bg-charcoal-gray h-20 opacity-80 w-full">
+                <span className="text-sm font-semibold text-white">
+                  {product.price}
+                </span>
+                <h3 className="text-md font-sans">{product.name}</h3>
+                <StarRatings
+                  numberOfStars={5}
+                  name="rating"
+                  rating={product.rating}
+                  starDimension="24px"
+                  starSpacing="2px"
+                  starRatedColor="#ffd700"
+                  starEmptyColor='rgb(203, 211, 227)'
+                />
+              </div>
+            </div>
+          </Link>
+        );
+      })}
+      
+    </Fragment>
   );
 }
 
-export default Product;
+export default Products;

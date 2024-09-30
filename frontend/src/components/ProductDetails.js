@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import StarRatings from "react-star-ratings";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { addItem } from "../Reducers/cartReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductDetails } from "../Reducers/ProductDetailReducer";
 import { useParams } from "react-router-dom";
@@ -162,9 +163,10 @@ function ProductDetails() {
                 </div>
 
                 {/* Add to Cart Button */}
-                <button className="mt-4 mobile:mt-4  block bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300">
-                  Add to Cart
-                </button>
+                {product&&product.images&&
+                <button onClick={()=>dispatch(addItem({name:product.name,id:product._id,price:product.price,quantity:quantity,image:product.images[0]}))} className="mt-4 mobile:mt-4  block bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300">
+                Add to Cart
+              </button>}
               </div>
             </div>
           </div>

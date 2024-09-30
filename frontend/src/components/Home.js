@@ -1,8 +1,9 @@
 import React from 'react'
 import Banner from './Banner'
-import Product from './Product.js';
+import Product from './featureProducts.js';
 import { useRef } from 'react'
 import Footer from './Footer.js';
+
 function Home() {
 
   const containerRef = useRef(null);
@@ -11,6 +12,7 @@ function Home() {
       containerRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
+ 
   return (
     <>
     <Banner scrollToContainer={scrollToContainer}/>

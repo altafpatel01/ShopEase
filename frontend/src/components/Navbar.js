@@ -1,66 +1,83 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import logo from '../logo.svg';
-import { FaSearch } from 'react-icons/fa'; // Import the search icon
-import { Link } from 'react-router-dom';
+import logo from "../logo.svg";
+import { FaSearch, FaShoppingCart } from "react-icons/fa"; // Import the search icon
+import { Link } from "react-router-dom";
 // import { fetchProducts } from '../Reducers/Reducers';
+// import { fetchProducts } from "../Reducers/Reducers";
+// import { useHistory } from 'react-router-dom';
 
-import {fetchSearchProducts} from '../Reducers/searchProduct'
-import { useDispatch } from 'react-redux';
+// import { fetchSearchProducts } from "../Reducers/searchProduct";
+import { useSelector } from "react-redux";
 // import e from 'express';
 const Navbar = () => {
+  // const history = useHistory();
+  const { userInfo } = useSelector((state) => state.user);
+  const { items } = useSelector((state) => state.cart);
   const navigate = useNavigate();
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  
+  const [searchQuery, setSearchQuery] = useState("");
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-const handleSearchQuery = (e)=>{
-  setSearchQuery(e.target.value)
-}
+  const handleSearchQuery = (e) => {
+    setSearchQuery(e.target.value);
+  };
   const handleSearch = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     // Handle search logic here
-    if (searchQuery === null || searchQuery.trim() === '') {
-        return; // Do nothing if searchQuery is null or empty
+    if (searchQuery.trim()) {
+      navigate(`/products/${searchQuery}`);
     } else {
-     const trimsearchQuery = searchQuery.toLowerCase().trim()
-      dispatch(fetchSearchProducts( trimsearchQuery))
-      // dispatch(fetchProducts(`?keyword=${trimsearchQuery}`))
-      navigate(`/search/results`);
-        // Place your search logic here
+      navigate(`/products`);
+      // dispatch(fetchSearchProducts(trimsearchQuery));
+      // dispatch(fetchProducts({trimsearchQuery}))
+      
+      // Place your search logic here
     }
-};
+  };
   return (
-    <div className="bg-soft-pastel-blue  z-50">
-      <div className="w-dvw flex-grow mx-auto px-4  sm:px-6 lg:px-8">
+    <div className="bg-soft-pastel-blue w-7xl z-50">
+      <div className=" flex-grow mx-auto px-4  sm:px-6 lg:px-8">
         <div className="flex flex-row justify-evenly h-16 items-center">
           <div className="flex items-center">
             <div className="shrink-0">
               <img className="h-16 w-16 " src={logo} alt="ShopEase Logo" />
             </div>
             <div className="hidden md:flex  ">
-              <Link to="/" className="text-white md:ml-4 hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
+              <Link
+                to="/"
+                className="text-white md:ml-4 hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium"
+              >
                 Home
               </Link>
-              <Link to="/about" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
+              <Link
+                to="/products"
+                className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium"
+              >
+                Products
+              </Link>
+              <Link
+                to="/about"
+                className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium"
+              >
                 About
               </Link>
-              <Link to="/shop" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
-                Shop
-              </Link>
-              <Link to="/contact" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium">
+              <Link
+                to="/contact"
+                className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-3 py-1 rounded-md text-sm font-medium"
+              >
                 Contact
               </Link>
             </div>
           </div>
 
           {/* Centered Search Bar */}
-          <div className="flex-grow  pl-10 flex justify-center">
+          <div className="flex-grow px-4   flex justify-center">
             <form onSubmit={handleSearch} className="flex w-full max-w-[600px]">
               <input
                 type="text"
@@ -69,31 +86,71 @@ const handleSearchQuery = (e)=>{
                 placeholder="Search..."
                 className="flex-1 placeholder:text-white text-white bg-transparent border-b border-white focus:outline-none "
               />
-              <button type="submit" className="bg-transparent text-white px-4 rounded-r-md  flex items-center">
-                <FaSearch className="h-5 w-5 mobile:h-3 mobile:w-3" />
+              <button
+                type="submit"
+                className="bg-transparent text-white  rounded-r-md  flex items-center"
+              >
+                <FaSearch className="h-3 w-3 mobile:h-3 mobile:w-3" />
               </button>
             </form>
           </div>
 
           {/* Sign In and Sign Up Links */}
-          <div className="hidden md:flex space-x-2">
-            <a href="/signin" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-2 rounded-md text-sm font-medium">
-              Sign In
-            </a>
-            <a href="/signup" className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-2 rounded-md text-sm font-medium">
-              Sign Up
-            </a>
-          </div>
+          {!userInfo ? (
+            <div className="hidden md:flex ml-2 space-x-0.5 relative">
+              <Link
+                to="/login"
+                className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-1 rounded-md text-sm font-medium"
+              >
+                SignIn
+              </Link>
+              <Link
+                to="/signup"
+                className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-1 rounded-md text-sm font-medium"
+              >
+                SignUp
+              </Link>
+            </div>
+          ) : (
+            <button onClick={()=>navigate('/cart')} className="text-white mobile:fixed z-50  mobile:bottom-4 mobile:right-4  ">
+              <div className="relative">
+              <span className=" absolute -top-1 -right-2 text-sm rounded-full bg-soft-pastel-blue mobile:bg-  w-4 h-4 text-center flex items-center justify-center ">{items.length}</span>
+              <FaShoppingCart className="h-6 w-6 mobile:h-10 mobile:w-10 text-white mobile:text-orange-600  " />
+              </div>
+            </button>
+          )}
 
           <div className="-mr-2 flex md:hidden">
             <button onClick={toggleMenu} className=" p-2 rounded-md text-white">
               {isOpen ? (
-                <svg className="h-6 w-6" fill="#ffffff" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="h-6 w-6"
+                  fill="#ffffff"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               ) : (
-                <svg className="h-6 w-6" fill="#ffffff" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                <svg
+                  className="h-6 w-6"
+                  fill="#ffffff"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16m-7 6h7"
+                  />
                 </svg>
               )}
             </button>
@@ -101,27 +158,54 @@ const handleSearchQuery = (e)=>{
         </div>
       </div>
 
-       {/* Mobile Menu */}
+      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden  bg-white w-1/2 h-1/2  ${} absolute transition-all duration-500 ease-linear top-16 right-0 z-40 ">
-          <Link to="/"  className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm">
-                Home
-              </Link>
-              <Link to="/about"  className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm">
-                About
-              </Link>
-              <Link to="/shop"  className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm">
-                Shop
-              </Link>
-              <Link to="/contact"  className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm">
-                Contact
-              </Link>
-          <a href="/signin" className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm">
+        <div className="md:hidden  bg-white w-1/2 h-dvh  ${} absolute transition-all duration-500 ease-linear top-16 right-0 z-40 ">
+          <Link
+            to="/"
+            onClick={toggleMenu}
+            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
+          >
+            Home
+          </Link>
+          <Link
+            to="/products"
+            onClick={toggleMenu}
+            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
+          >
+            Products
+          </Link>
+          <Link
+            to="/about"
+            onClick={toggleMenu}
+            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            onClick={toggleMenu}
+            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
+          >
+            Contact
+          </Link>
+         {!userInfo && <>
+          <Link
+            to="/login"
+            onClick={toggleMenu}
+            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
+          >
             Sign In
-          </a>
-          <a href="/signup" className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm">
+          </Link>
+          <Link
+            onClick={toggleMenu}
+            to="/signup"
+            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
+          >
             Sign Up
-          </a>
+          </Link>
+          </>
+          }
         </div>
       )}
     </div>

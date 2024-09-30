@@ -8,22 +8,93 @@ const Product = require('../models/productModel');
 // const bcrypt =require('bcrypt')
 
 //creating the account and generating the token
-exports.registerUser = asyncHandler( async(req,res,next)=>{
-    const {name,email,password,confirmPassword}=req.body
+exports.registerUser = asyncHandler(async (req, res, next) => {
+  const { name, email, password, confirmPassword } = req.body;
 
-    if (password !== confirmPassword) {
-        return next(new ErrorHandler('Passwords do not match', 400));
-      }
-    const user = await User.create({
-        name,email,password,
-        avatar:{
-            public_id:'this is publlic id',
-            url:'publicurl'
-        }
-    })
-    sendToken(user,200,res)
+  if (password !== confirmPassword) {
+      return next(new ErrorHandler('Passwords do not match', 400));
 
-})
+  }
+  const isRegister =await User.findOne({eamil:email})
+  if (isRegister) {
+    return next(new ErrorHandler('Email is all ready register', 400));
+
+}
+
+  // Generate a random 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  const user = await User.create({
+      name,
+      email,
+      password,
+      avatar: {
+          public_id: 'this is public id',
+          url: 'publicurl',
+      },
+      emailOtp: otp, // Store the OTP in the database
+      isVerified: false, // Set isVerified to false
+      otpExpires: Date.now() + 10 * 60 * 1000, // OTP expires in 10 minutes
+  });
+
+  // Send OTP via email
+  const message = `Your email verification OTP is: ${otp}. This OTP will expire in 10 minutes.`;
+
+  await sendEmail({
+    to: user.email,
+    subject: message
+    
+  });
+
+  // const transporter = nodemailer.createTransport({
+  //     service: 'Gmail', // or another email provider
+  //     auth: {
+  //         user: process.env.EMAIL, // Your email address
+  //         pass: process.env.PASSWORD, // Your email password
+  //     },
+  // });
+
+  // await transporter.sendMail({
+  //     from: process.env.EMAIL,
+  //     to: user.email,
+  //     subject: 'Email Verification OTP',
+  //     text: message,
+  // });
+
+  res.status(200).json({
+      success: true,
+      message: 'An OTP has been sent to your email. Please verify.',
+      user
+  });
+});
+
+
+exports.verifyEmailOtp = asyncHandler(async (req, res, next) => {
+  const { email, otp } = req.body;
+
+  // Find the user by email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+      return next(new ErrorHandler('User not found', 404));
+  }
+
+  // Check if OTP is correct and hasn't expired
+  if (user.emailOtp !== otp || user.otpExpires < Date.now()) {
+      return next(new ErrorHandler('Invalid or expired OTP', 400));
+  }
+
+  // Mark user as verified and clear OTP fields
+  user.isVerified = true;
+  user.emailOtp = undefined;
+  user.otpExpires = undefined;
+
+  await user.save();
+
+  // Optionally, you can log the user in after verification
+  sendToken(user, 200, res);
+});
+
 //login to the account and generate jwt token
 exports.loginUser = asyncHandler(async(req,res,next)=>{
     const {email,password} = req.body

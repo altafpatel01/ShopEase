@@ -32,7 +32,7 @@ const sendEmail = async (options) => {
             If you didn't request this, please ignore this email.
           </p>
           <p style="font-size: 12px; color: #999;">
-            © ${new Date().getFullYear()} Ecommerce. All rights reserved.
+            © ${new Date().getFullYear()} ShopEase. All rights reserved.
           </p>
         </div>
       </div>

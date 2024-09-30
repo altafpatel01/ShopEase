@@ -5,10 +5,18 @@ import axios from "axios";
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (page) => {
+  async ({keyword="",page=1,priceRange=[0,5000]}) => {
     try {
-      const response = await axios.get(`/api/v1/products?page=${page}`); // Adjust the URL as necessary
-      return response.data; // Return the products directly
+     
+      // if(!keyword&&!page&&priceRange){
+      //   let link =`/api/v1/products?keyword`
+      // const response = await axios.get(link)
+      // return response.data
+
+      // }
+      let link =`/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${priceRange[0]}&price[lte]=${priceRange[1]}`
+      const response = await axios.get(link)
+      return response.data
     } catch (error) {
       // Throw a new error to be handled by the extraReducers
       throw new Error(
@@ -38,6 +46,8 @@ const productsSlice = createSlice({
         state.products = action.payload.products;
         state.message = action.payload.message;
         state.productCount = action.payload.productCount;
+        state.filtersProductCounts = action.payload.filtersProductCounts;
+        state.resultPerPage = action.resultPerPage;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.isLoading = false;
