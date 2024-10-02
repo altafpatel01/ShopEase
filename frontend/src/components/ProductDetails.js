@@ -155,7 +155,7 @@ function ProductDetails() {
                     readOnly
                   />
                   <button
-                    onClick={() => setQuantity(quantity + 1)}
+                    onClick={() =>{if(quantity<product.stock) {setQuantity(quantity + 1)}}}
                     className="border border-blue-800 h-8 w-8 flex justify-center items-center text-blue-800 rounded hover:bg-blue-800 hover:text-white transition duration-200 ease-in-out"
                   >
                     +

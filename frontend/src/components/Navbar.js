@@ -125,14 +125,14 @@ const Navbar = () => {
                     <FaShoppingCart className="h-6 w-6 mobile:h-10 mobile:w-10 text-white mobile:text-orange-600  " />
                   </div>
                 </button>
-                {!userInfo ? (
+                {!userInfo.avatar.url ? (
                   <button className="bg-transparent text-white  rounded-r-md  flex items-center">
                     <FaUser className="h-5 w-5 mobile:h-5 mobile:w-5" />
                   </button>
                 ) : (
                   <div onClick={()=>{navigate('/account')}} className="bg-transparent w-6 h-6 text-white  rounded-full  flex items-center">
                     {/* <FaUser className="h-5 w-5 mobile:h-5 mobile:w-5" /> */}
-                    <img className="rounded-full" src={userInfo.avatar.url} alt="profile" />
+                    <img className="rounded-full w-5 h-5" src={userInfo.avatar.url} alt="profile" />
                   </div>
                 )}
               </div>

@@ -61,7 +61,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 
   await sendEmail({
     to: user.email,
-    subject: message
+    subject: 'please verify your email for registering with ShopEase',
+    text:message
     
   });
 
@@ -110,7 +111,8 @@ await user.save();
 
   await sendEmail({
     to: user.email,
-    subject: message
+    subject: 'Email verification for ShopEase Account',
+    text:message
     
   });
 
@@ -132,6 +134,7 @@ await user.save();
   res.status(200).json({
       success: true,
       message: 'An new OTP has been sent to your email. Please verify.',
+
       user
   });
 });
@@ -183,7 +186,8 @@ exports.verifyEmailOtp = asyncHandler(async (req, res, next) => {
 
   await sendEmail({
     to: user.email,
-    subject: message
+    subject: 'Welcome to ShopEase',
+    text:message
     
   });
 });
@@ -219,47 +223,58 @@ exports.logOut= asyncHandler(async(req,res,next)=>{
 })
 //generatingthe url and resettoken for updating the passwoord
 exports.forgotPassword = async (req, res) => {
-    try {
-      const { email } = req.body;
-  
-      // Find the user by email
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).json({ message: 'No user found with that email address' });
-      }
-  
-      // Generate a reset token
-      const resetToken = crypto.randomBytes(32).toString('hex');
-  
-      // Set token and expiry on the user (for example, 1 hour expiration)
-      user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-      user.resetPasswordExpire = Date.now() + 1*60*60*1000; // 1 hour
-  
-      await user.save();
-  
-      // Create a reset URL
-      const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/reset-password/${resetToken}`;
-  
-      // Send the email with the reset link
-      await sendEmail({
-        to: user.email,
-        subject: 'Password Reset Request',
-        resetUrl:resetUrl
-      });
-  
-      res.status(200).json({ message: 'Password reset link sent to email' });
-  
-    } catch (error) {
-      res.status(500).json({ message: 'Error sending password reset email', error });
+  try {
+    const { email } = req.body;
+
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'No user found with that email address' });
     }
-  };
-//reset the password of the user 
+
+    // Generate a reset token
+    const resetToken =  crypto.randomBytes(32).toString('hex');
+
+    // Hash token and set reset token fields on the user (for example, 1 hour expiration)
+    user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    user.resetPasswordExpire = Date.now() + 60 * 60 * 1000; // 1 hour
+
+    await user.save();
+
+    // Create reset URL
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/reset-password/${resetToken}`;
+    // const resetUrl =`localhost:3000/reset-password/${resetToken}`
+    console.log(resetUrl)
+
+
+    // Send the email with the reset link
+    const emailSent = await sendEmail({
+      to: user.email,
+      subject: 'Password Reset Request',
+      text: 'You requested a password reset. Please click on the link below to reset your password: If you did not request this, please ignore this email. This link is valid for 1 hour.',
+      resetUrl:resetUrl,
+    });
+
+    if (!emailSent) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+      return res.status(500).json({ message: 'Failed to send the email. Please try again later.' });
+    }
+
+    res.status(200).json({ message: 'Password reset link sent to email' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error sending password reset email', error: error.message });
+  }
+};//reset the password of the user 
 exports.resetPassword = async (req, res,next) => {
     try {
       // Hash the token received from the URL
       const {token}=req.params
-      
+      console.log(token)
       const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
   
       // Find the user with the matching reset token and check if it's not expired
@@ -273,12 +288,13 @@ exports.resetPassword = async (req, res,next) => {
       }
   
       // Set the new password
-      const { newPassword,confirmPassword} = req.body;
-      if(newPassword===confirmPassword||!newPassword||!confirmPassword){
-        return next(new ErrorHandler('password does match or Please enter both password',400))
+      const { password,confirmPassword} = req.body;
+      console.log( password,confirmPassword)
+      if(password!==confirmPassword){
+        return next(new ErrorHandler('new password and confirm password are not match',400))
       }
     //   user.password = await bcrypt.hash(password, 10);
-    user.password=newPassword
+    user.password=password
   
       // Clear the reset token fields
       user.resetPasswordToken = undefined;
@@ -319,48 +335,8 @@ exports.updatePassword = asyncHandler(async(req,res ,next)=>{
     await user.save()
 
     sendToken(user,200,res)
-    // res.status(200).json({
-    //     success:true,
-    //     message:"Password update successfully",
-    //     user
-
-    // })
-})
-//update detail of profile of login user 
-// exports.updateProfile = asyncHandler(async (req, res, next) => {
     
-//       // Find the logged-in user by ID (assume req.user contains the authenticated user)
-//       const user = await User.findById(req.user.id);
-  
-//       if (!user) {
-//         return next(new ErrorHandler('User not found', 404));
-//       }
-  
-//       const { name, email } = req.body;
-//   //cloudinary update for profile is pending
-//       // Optional: check if email already exists (to avoid duplicates)
-//       const existingUser = await User.findOne({ email });
-//       if (existingUser && existingUser.id !== req.user.id) {
-//         return next(new ErrorHandler('Email already taken by another user', 400));
-//       }
-  
-//       // Update user details
-//       user.name = name || user.name;
-//       user.email = email || user.email;
-  
-//       // Save updated user
-//       await user.save();
-  
-//       res.status(200).json({
-//         success: true,
-//         message: 'Profile updated successfully',
-//         user,
-//       });
-   
-//   }
-  
-  
-// )
+})
 
 
 
@@ -371,15 +347,18 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
   if (!user) {
       return next(new ErrorHandler('User not found', 404));
   }
-
+const imageid = user.avatar.public_id
+ await cloudinary.uploader.destroy(imageid);
   // Check if a new avatar file is uploaded
   if (req.files && req.files.avatar) {
       const file = req.files.avatar;
       
       // Upload avatar image to Cloudinary
+
       const result = await cloudinary.uploader.upload(file.tempFilePath, {
           folder: 'avatars',
           width: 150,
+          
           crop: 'scale',
       });
 

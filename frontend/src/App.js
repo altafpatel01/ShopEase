@@ -15,22 +15,24 @@ import AuthForm from "./components/AuthForm.js";
 import { useDispatch, useSelector } from "react-redux";
 import { loadUser } from "./Reducers/userSignupReducer.js";
 import Profile from './components/Profile.js'
+import ForgotPassword from "./components/forgotPassword.js";
+import ResetPassword from "./components/ResetPassword.js";
 function App() {
 const dispatch = useDispatch()
-const { userInfo} = useSelector(state=>state.user)
+const { userInfo, isAuthenticated,loading} = useSelector(state=>state.user)
 useEffect(() => {
   
 dispatch(loadUser())
  
   
-}, [dispatch])
+}, [dispatch,isAuthenticated])
 
   return (
     <Fragment>
       <Router>
         <Navbar />
         <Routes>
-           <Route path="/account" element={<Profile user={userInfo}/>}/>
+         {!loading&&isAuthenticated && <Route path="/account" element={<Profile user={userInfo}/>}/>}
           <Route path="/products" element={<Product />} />
           <Route path="/" exact element={<Home />} />
           <Route path="/product/:id" element={<ProductDetails />} />
@@ -38,8 +40,13 @@ dispatch(loadUser())
           <Route path="/login" element={<Login />} /> */}
           <Route path="/about" element={<About />} />
           <Route path="/products/:keyword" element={<Product />} />
-          <Route path="/cart" element={<Cart />} />
+          { isAuthenticated&&<Route path="/cart" element={<Cart />} />}
            <Route path="/auth" element={<AuthForm />} />
+           <Route path="/forgot-password" element={<ForgotPassword />} />
+           <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+           {/* <Route path="*" element={<Home/>} /> */}
+
         </Routes>
       </Router>
     </Fragment>

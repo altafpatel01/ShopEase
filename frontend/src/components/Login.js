@@ -86,7 +86,7 @@ function Login() {
                             >
                                 Sign In
                             </button>
-                            <Link to="/forgotPassword" className="underline">
+                            <Link to="/forgot-Password" className="underline">
                                 <p>Forgot Password?</p>
                             </Link>
                         </form>

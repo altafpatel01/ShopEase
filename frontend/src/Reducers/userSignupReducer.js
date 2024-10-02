@@ -130,7 +130,7 @@ const userSlice = createSlice({
         error: null,
         isAuthenticated:false,
         message: null,
-        otpSent: false, // New state for OTP sent status
+        otpSents: false, // New state for OTP sent status
         emailVerified: false, // New state for email verification status
     },
     reducers: {
@@ -141,7 +141,7 @@ const userSlice = createSlice({
             state.message = null;
         },
         resetOtpSent: (state) => {
-            state.otpSent = false;
+            state.otpSents = false;
         },
         resetEmailVerified: (state) => {
             state.emailVerified = false;
@@ -158,11 +158,12 @@ const userSlice = createSlice({
                 state.loading = false;
                 // state.userInfo = action.payload.user;
                 // state.message = action.payload.message;
-                state.otpSent = true; // Set OTP sent status to true
+                state.otpSents = true; // Set OTP sent status to true
             })
             .addCase(signupUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload.message;
+                state.otpSents =false
             })
 
             //token authentication
@@ -213,7 +214,7 @@ const userSlice = createSlice({
                 state.loading = false;
                 // state.userInfo = action.payload.user;
                 // state.message = action.payload.message;
-                state.otpSent = true; // Set OTP sent status to true
+                state.otpSents = true; // Set OTP sent status to true
             })
             .addCase(resendOtp.rejected, (state, action) => {
                 state.loading = false;
