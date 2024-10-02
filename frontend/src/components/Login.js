@@ -1,15 +1,16 @@
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { loginUser } from "../Reducers/userSignupReducer";
+import { Link,useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { loginUser,resetError } from "../Reducers/userSignupReducer";
 import Loader from "./Loading";
 
 function Login() {
     const dispatch = useDispatch()
-    const {Loading,error} = useSelector((state)=>state.user)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+    const {Loading,error,userInfo,isAuthenticated} = useSelector((state)=>state.user)
+    // const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
    
@@ -17,7 +18,7 @@ function Login() {
     const handleSignin =  (e) => {
         e.preventDefault()
         dispatch(loginUser({email,password}))
-        navigate("/")
+       
         // e.preventDefault(); // Prevent form submission
         // try {
         //     const { data } = await axios.post("/api/v1/login", { email, password });
@@ -30,28 +31,28 @@ function Login() {
     };
 
     // Logic to hide the eyes when the password is not empty
-    const hideEyes = password !== '';
+    useEffect(() => {
+        // If user is logged in, navigate to home
+        if (isAuthenticated) {
+          navigate('/');
+        }
+        // Optional: Reset error message after displaying it
+        if (error) {
+          setTimeout(() => dispatch(resetError()), 5000); // Clears error after 5 seconds
+        }
+      }, [userInfo, error, navigate, dispatch,isAuthenticated]);
 
     return (
         <Fragment>
-           {Loading?<Loader/>: !error ? (
+           {Loading?<Loader/>: (
                 <div className="w-7xl">
-                    <div className="max-w-xl mx-auto px-4 py-20">
+                    <div className="max-w-xl mx-auto px-4 py-5">
+                    <h2 className="text-2xl font-bold text-center mb-4">Welcome Back</h2>
                         <form onSubmit={handleSignin}>
                             
 
                             {/* Monkey face with eye visibility logic */}
-                            <div className="relative text-center mb-4">
-                                <div className="w-24 h-24 mx-auto bg-yellow-300 rounded-full relative"> {/* Monkey face */}
-                                    {/* Monkey eyes */}
-                                    {!hideEyes && (
-                                        <div className="absolute w-full h-full top-0 left-0 flex justify-around items-center">
-                                            <div className="w-4 h-4 bg-black rounded-full"></div> {/* Left eye */}
-                                            <div className="w-4 h-4 bg-black rounded-full"></div> {/* Right eye */}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
+                            
 
                             <label className="block text-gray-700 mb-2" htmlFor="email">
                                 Email
@@ -78,7 +79,7 @@ function Login() {
                                 required
                                 placeholder="Enter your Password"
                             />
-                            
+                            <p className="text-red-500 text-center">{error}</p>
                             <button
                                 type="submit"
                                 className="bg-blue-700 text-white my-4 inline text-center px-4 py-2 rounded-md"
@@ -91,11 +92,11 @@ function Login() {
                         </form>
                     </div>
                 </div>
-            ) : (
-                <p className="text-red-500 text-center">{error}</p>
-            )}
+            ) }
         </Fragment>
     );
 }
 
 export default Login;
+
+

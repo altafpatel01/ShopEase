@@ -72,10 +72,10 @@ function ProductDetails() {
         <ErrorPage message={"Details are not acialable"} />
       ) : (
         <>
-          <div className="flex justify-between w-7xl  overflow-x-hidden  mobile:items-center mobile:flex-col mobile:py-0  py-8  ">
-            <div className=" mobile:w-[100%] w-[50%] mobile:p-0   h-96 object-contain relative  mobile:mt-0  ">
+          <div className="flex justify-between w-7xl  overflow-x-hidden  mobile:items-center mobile:flex-col mobile:py-0  md:my-10 ">
+            <div className=" mobile:w-[100%] w-[50%] mobile:p-0   h-96 object-contain relative   mobile:mt-0  ">
               <Slider
-                className=" w-[50%] mobile:w-[100%] absolute top-[50%] mobile:left-[50%] left-[60%]   translate-x-[-50%]  translate-y-[-50%]"
+                className=" w-[50%] mobile:w-[100%] absolute top-[50%] mobile:left-[50%] left-[60%] overflow-y-hidden rounded-md border   translate-x-[-50%]  translate-y-[-50%]"
                 {...settings}
               >
                 {product && product.images && product.images.length > 0 ? (
@@ -84,7 +84,7 @@ function ProductDetails() {
                       <img
                         src={image.url}
                         alt="Product "
-                        className="object-cover mobile:w-[100%]  h-[50%]"
+                        className="object-cover mobile:w-[100%] border overflow-hidden rounded-md h-[100%]"
                       />
                     </div>
                   ))

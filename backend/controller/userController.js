@@ -5,17 +5,19 @@ const sendToken = require('../utils/jwtToken')
 const crypto = require('crypto');
 const sendEmail = require('../utils/sendmails');
 const Product = require('../models/productModel');
+const cloudinary = require('cloudinary').v2
 // const bcrypt =require('bcrypt')
 
 //creating the account and generating the token
+
 exports.registerUser = asyncHandler(async (req, res, next) => {
   const { name, email, password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
-      return next(new ErrorHandler('Passwords do not match', 400));
+      return next(new ErrorHandler('Passwords does not match', 400));
 
   }
-  const isRegister =await User.findOne({eamil:email})
+  const isRegister =await User.findOne({email:email})
   if (isRegister) {
     return next(new ErrorHandler('Email is all ready register', 400));
 
@@ -38,7 +40,24 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   });
 
   // Send OTP via email
-  const message = `Your email verification OTP is: ${otp}. This OTP will expire in 10 minutes.`;
+  const message = `
+  Hi ${name},
+
+  Welcome to ShopEase! 🎉 We're excited to have you on board.
+
+  To complete your registration, please verify your email by using the One-Time Password (OTP) provided below:
+
+  🔑 Your OTP: ${otp}
+
+  Please note, this OTP will expire in 10 minutes, so be sure to verify your email before it expires.
+
+  If you did not request this, please ignore this email.
+
+  We're looking forward to helping you with your shopping experience.
+
+  Best regards,
+  The ShopEase Team
+`;
 
   await sendEmail({
     to: user.email,
@@ -68,6 +87,54 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   });
 });
 
+exports.resendOtp = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+
+  
+
+  // Generate a random 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  const user = await User.findOne({email:email });
+
+  if (!user) {
+    return next(new ErrorHandler('User not found', 404));
+}
+user.emailOtp = otp;
+user.otpExpires = Date.now()+10*60*1000;
+
+await user.save();
+
+  // Send OTP via email
+  const message = `Your email verification new OTP is: ${otp}. This OTP will expire in 10 minutes.`;
+
+  await sendEmail({
+    to: user.email,
+    subject: message
+    
+  });
+
+  // const transporter = nodemailer.createTransport({
+  //     service: 'Gmail', // or another email provider
+  //     auth: {
+  //         user: process.env.EMAIL, // Your email address
+  //         pass: process.env.PASSWORD, // Your email password
+  //     },
+  // });
+
+  // await transporter.sendMail({
+  //     from: process.env.EMAIL,
+  //     to: user.email,
+  //     subject: 'Email Verification OTP',
+  //     text: message,
+  // });
+
+  res.status(200).json({
+      success: true,
+      message: 'An new OTP has been sent to your email. Please verify.',
+      user
+  });
+});
 
 exports.verifyEmailOtp = asyncHandler(async (req, res, next) => {
   const { email, otp } = req.body;
@@ -85,7 +152,7 @@ exports.verifyEmailOtp = asyncHandler(async (req, res, next) => {
   }
 
   // Mark user as verified and clear OTP fields
-  user.isVerified = true;
+ user.isVerified = true;
   user.emailOtp = undefined;
   user.otpExpires = undefined;
 
@@ -93,6 +160,32 @@ exports.verifyEmailOtp = asyncHandler(async (req, res, next) => {
 
   // Optionally, you can log the user in after verification
   sendToken(user, 200, res);
+
+  const message = `
+  Hi ${user.name},
+
+  Congratulations! 🎉 Your email has been successfully verified.
+
+  Welcome to the ShopEase family! 🛍️ We're thrilled to have you as part of our community. You can now enjoy full access to your account and start exploring our amazing products and deals.
+
+  Here's what you can do next:
+  - Browse our latest collections.
+  - Add your favorite items to your cart.
+  - Complete your purchase in a few easy steps.
+
+  If you have any questions, feel free to reach out to our support team—we’re always here to help!
+
+  Happy shopping!
+
+  Best regards,
+  The ShopEase Team
+`;
+
+  await sendEmail({
+    to: user.email,
+    subject: message
+    
+  });
 });
 
 //login to the account and generate jwt token
@@ -102,14 +195,15 @@ exports.loginUser = asyncHandler(async(req,res,next)=>{
         return next(new ErrorHandler('please enter email and password both', 400))
     }
     const user = await User.findOne({email}).select("+password")
+
     if(!user){
-        return next(new ErrorHandler('please valid email and password both', 401))
+        return next(new ErrorHandler('please enter valid email and password', 401))
     }
 
-    const passwordMatch = user.comparePassword(password)
+    const passwordMatch = await user.comparePassword(password)
 
     if(!passwordMatch){
-        return next(new ErrorHandler('please valid email and password both', 401))
+        return next(new ErrorHandler('please enter valid email and password', 401))
     }
     sendToken(user,201,res)
    
@@ -233,40 +327,78 @@ exports.updatePassword = asyncHandler(async(req,res ,next)=>{
     // })
 })
 //update detail of profile of login user 
-exports.updateProfile = asyncHandler(async (req, res, next) => {
+// exports.updateProfile = asyncHandler(async (req, res, next) => {
     
-      // Find the logged-in user by ID (assume req.user contains the authenticated user)
-      const user = await User.findById(req.user.id);
+//       // Find the logged-in user by ID (assume req.user contains the authenticated user)
+//       const user = await User.findById(req.user.id);
   
-      if (!user) {
-        return next(new ErrorHandler('User not found', 404));
-      }
+//       if (!user) {
+//         return next(new ErrorHandler('User not found', 404));
+//       }
   
-      const { name, email } = req.body;
-  //cloudinary update for profile is pending
-      // Optional: check if email already exists (to avoid duplicates)
-      const existingUser = await User.findOne({ email });
-      if (existingUser && existingUser.id !== req.user.id) {
-        return next(new ErrorHandler('Email already taken by another user', 400));
-      }
+//       const { name, email } = req.body;
+//   //cloudinary update for profile is pending
+//       // Optional: check if email already exists (to avoid duplicates)
+//       const existingUser = await User.findOne({ email });
+//       if (existingUser && existingUser.id !== req.user.id) {
+//         return next(new ErrorHandler('Email already taken by another user', 400));
+//       }
   
-      // Update user details
-      user.name = name || user.name;
-      user.email = email || user.email;
+//       // Update user details
+//       user.name = name || user.name;
+//       user.email = email || user.email;
   
-      // Save updated user
-      await user.save();
+//       // Save updated user
+//       await user.save();
   
-      res.status(200).json({
-        success: true,
-        message: 'Profile updated successfully',
-        user,
-      });
+//       res.status(200).json({
+//         success: true,
+//         message: 'Profile updated successfully',
+//         user,
+//       });
    
+//   }
+  
+  
+// )
+
+
+
+exports.updateProfile = asyncHandler(async (req, res, next) => {
+  const { name } = req.body;
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+      return next(new ErrorHandler('User not found', 404));
   }
-  
-  
-)
+
+  // Check if a new avatar file is uploaded
+  if (req.files && req.files.avatar) {
+      const file = req.files.avatar;
+      
+      // Upload avatar image to Cloudinary
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+          folder: 'avatars',
+          width: 150,
+          crop: 'scale',
+      });
+
+      // Update user's avatar details in the database
+      user.avatar.public_id = result.public_id;
+      user.avatar.url = result.secure_url;
+  }
+
+  // Update name if provided
+  user.name = name || user.name;
+
+  await user.save();
+
+  res.status(200).json({
+      success: true,
+      message: 'Profile updated successfully',
+      user,
+  });
+});
 //get all user for admin
 exports.getAllUser =asyncHandler(async(req,res)=>{
     const getUsers = await User.find({})

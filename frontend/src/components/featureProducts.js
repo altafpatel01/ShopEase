@@ -8,10 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../Reducers/Reducers";
 import Loading from "./Loading";
 import ErrorPage from "./ErrorPage";
+import { useNavigate } from "react-router-dom";
 // import AdvancedFilters from "./Filter";
 // import { useParams } from "react-router-dom";
 
 function Product({ containerRef}) {
+  const navigate = useNavigate()
 
     const dispatch = useDispatch();
  
@@ -22,7 +24,9 @@ function Product({ containerRef}) {
   const { isLoading, error } = useSelector(
     (state) => state.getProducts
   );
-
+const navigateTOMore = ()=>{
+  navigate('/products')
+}
   useEffect(() => {
     dispatch(fetchProducts({keyword:'',page:1}));
   }, [dispatch]);
@@ -61,7 +65,14 @@ function Product({ containerRef}) {
               <div className="flex justify-center my-8 ">
                 
               </div>
+              <button
+                    onClick={navigateTOMore}
+                    className=" flex justify-center mx-auto bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
+                  >
+                    More Products..
+                  </button>
             </div>
+            
             </div>
           </>
         )}

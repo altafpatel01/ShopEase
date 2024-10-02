@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import logo from "../logo.svg";
-import { FaSearch, FaShoppingCart } from "react-icons/fa"; // Import the search icon
+import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"; // Import the search icon
 import { Link } from "react-router-dom";
 // import { fetchProducts } from '../Reducers/Reducers';
 // import { fetchProducts } from "../Reducers/Reducers";
@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 // import e from 'express';
 const Navbar = () => {
   // const history = useHistory();
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const { items } = useSelector((state) => state.cart);
   const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ const Navbar = () => {
       navigate(`/products`);
       // dispatch(fetchSearchProducts(trimsearchQuery));
       // dispatch(fetchProducts({trimsearchQuery}))
-      
+
       // Place your search logic here
     }
   };
@@ -96,28 +96,47 @@ const Navbar = () => {
           </div>
 
           {/* Sign In and Sign Up Links */}
-          {!userInfo ? (
+          {!isAuthenticated ? (
             <div className="hidden md:flex ml-2 space-x-0.5 relative">
               <Link
-                to="/login"
+                to="/auth"
                 className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-1 rounded-md text-sm font-medium"
               >
-                SignIn
+                Login/Signup
               </Link>
-              <Link
+              {/* <Link
                 to="/signup"
                 className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-1 rounded-md text-sm font-medium"
               >
                 SignUp
-              </Link>
+              </Link> */}
             </div>
           ) : (
-            <button onClick={()=>navigate('/cart')} className="text-white mobile:fixed z-50  mobile:bottom-4 mobile:right-4  ">
-              <div className="relative">
-              <span className=" absolute -top-1 -right-2 text-sm rounded-full bg-soft-pastel-blue mobile:bg-  w-4 h-4 text-center flex items-center justify-center ">{items.length}</span>
-              <FaShoppingCart className="h-6 w-6 mobile:h-10 mobile:w-10 text-white mobile:text-orange-600  " />
+            <>
+              <div className="flex gap-5">
+                <button
+                  onClick={() => navigate("/cart")}
+                  className="text-white mobile:fixed z-50  mobile:bottom-4 mobile:right-4  "
+                >
+                  <div className="relative">
+                    <span className=" absolute -top-1 -right-2 text-sm rounded-full bg-soft-pastel-blue mobile:bg-  w-4 h-4 text-center flex items-center justify-center ">
+                      {items.length}
+                    </span>
+                    <FaShoppingCart className="h-6 w-6 mobile:h-10 mobile:w-10 text-white mobile:text-orange-600  " />
+                  </div>
+                </button>
+                {!userInfo ? (
+                  <button className="bg-transparent text-white  rounded-r-md  flex items-center">
+                    <FaUser className="h-5 w-5 mobile:h-5 mobile:w-5" />
+                  </button>
+                ) : (
+                  <div onClick={()=>{navigate('/account')}} className="bg-transparent w-6 h-6 text-white  rounded-full  flex items-center">
+                    {/* <FaUser className="h-5 w-5 mobile:h-5 mobile:w-5" /> */}
+                    <img className="rounded-full" src={userInfo.avatar.url} alt="profile" />
+                  </div>
+                )}
               </div>
-            </button>
+            </>
           )}
 
           <div className="-mr-2 flex md:hidden">
@@ -189,23 +208,15 @@ const Navbar = () => {
           >
             Contact
           </Link>
-         {!userInfo && <>
-          <Link
-            to="/login"
-            onClick={toggleMenu}
-            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
-          >
-            Sign In
-          </Link>
-          <Link
-            onClick={toggleMenu}
-            to="/signup"
-            className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
-          >
-            Sign Up
-          </Link>
-          </>
-          }
+          {!isAuthenticated && (
+            <Link
+              to="/auth"
+              onClick={toggleMenu}
+              className="block text-charcoal-gray border-b-black border-b hover:bg-gray-600 px-4 py-2 text-sm"
+            >
+              Login/Signup
+            </Link>
+          )}
         </div>
       )}
     </div>

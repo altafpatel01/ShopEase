@@ -1,12 +1,20 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
+
+const bodyParser = require('body-parser')
 const productrouter = require('./router/productRoute')
 const userrouter = require('./router/userRouter')
 const orderrouter = require('./router/orderRouter')
+const fileUpload = require('express-fileupload');
 const errorss = require('./middleware/errors')
 const app = express()
 app.use(cookieParser())
 app.use(express.json())
+app.use(bodyParser.json())
+app.use(fileUpload({
+    useTempFiles: true, // Required if you plan to use cloud services like Cloudinary
+    tempFileDir: '/tmp/', // Specify temp file directory for uploading files
+}));
 
 app.use('/api/v1',productrouter)
 app.use('/api/v1',userrouter)

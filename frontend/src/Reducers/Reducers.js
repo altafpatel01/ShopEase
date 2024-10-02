@@ -10,7 +10,7 @@ export const fetchProducts = createAsyncThunk(
      
       let link =`/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${priceRange[0]}&price[lte]=${priceRange[1]}&rating[gte]=${rating}`
       if (categories.length > 0) {
-        link += `&categories=${categories.join(",")}`; // Join selected categories into a comma-separated string
+        link += `&rating[gte]=${rating}&categories=${categories.join(",")}`; // Join selected categories into a comma-separated string
         
       }
       const response = await axios.get(link)

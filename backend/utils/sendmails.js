@@ -17,9 +17,9 @@ const sendEmail = async (options) => {
     html: `
       <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f4;">
         <div style="max-width: 600px; margin: 0 auto; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-          <h1 style="color: #333;">${options.subject}</h1>
+          
           <p style="font-size: 16px; color: #555;">
-            👍
+          ${options.subject}
           </p>
           ${
             options.resetUrl
