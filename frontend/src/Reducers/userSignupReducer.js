@@ -175,7 +175,7 @@ const userSlice = createSlice({
             .addCase(loadUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.userInfo = action.payload.user;
-                state.message = action.payload;
+                state.message = action.payload.message;
                 state.isAuthenticated=action.payload.success
                 // state.otpSent = true; // Set OTP sent status to true
             })

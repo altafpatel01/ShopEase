@@ -274,7 +274,7 @@ exports.resetPassword = async (req, res,next) => {
     try {
       // Hash the token received from the URL
       const {token}=req.params
-      console.log(token)
+      
       const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
   
       // Find the user with the matching reset token and check if it's not expired
@@ -289,7 +289,7 @@ exports.resetPassword = async (req, res,next) => {
   
       // Set the new password
       const { password,confirmPassword} = req.body;
-      console.log( password,confirmPassword)
+      
       if(password!==confirmPassword){
         return next(new ErrorHandler('new password and confirm password are not match',400))
       }

@@ -46,6 +46,7 @@ function Product() {
 
   const handleFilters = () => {
     dispatch(fetchProducts({ keyword, page, priceRange, categories,rating })); // Pass categories array
+    toogleFilterbar()
   };
   const handlePriceChange = (value) => {
     setPriceRange(value);
@@ -150,7 +151,7 @@ function Product() {
                   </div>
 
                   {/* Sort By Filter */}
-                  <div className="mb-6">
+                  {/* <div className="mb-6">
                     <h3 className="text-md font-medium text-gray-800 mb-2">
                       Sort By
                     </h3>
@@ -158,7 +159,7 @@ function Product() {
                       <option value="lowToHigh">Price: Low to High</option>
                       <option value="highToLow">Price: High to Low</option>
                     </select>
-                  </div>
+                  </div> */}
 
                   {/* Apply Filters Button */}
                   <button
@@ -192,18 +193,18 @@ function Product() {
               </div>
             </div>
 
-            <div className="mt-20 md:hidden flex flex-col absolute top-0">
+            <div className="mt-20 md:hidden mobile:h-screen  flex flex-col absolute top-0">
               {openFilters ? (
                 <button
                   onClick={toogleFilterbar}
-                  className=" items-center bg-blue-600  text-white rounded-md px-2 py-1 font-serif absolute left-7 -top-7 flex "
+                  className=" items-center bg-blue-600  text-white rounded-md px-2 py-1 font-serif absolute left-6 -top-7 flex "
                 >
                   Apply <FaFilter className="w-3 h-3 ml-2 fill-white" />
                 </button>
               ) : (
                 <>
-                  <div className="mobile:w-dvw mobile:h-full p-4 bg-white  rounded-lg shadow-md mb-4 md:w-64">
-                    <h2 className="text-lg font-semibold flex items-center text-gray-700 border-b pb-2 mb-4">
+                  <div className="mobile:w-dvw mobile:h-full  p-4 bg-white  rounded-lg shadow-md mb-4 md:w-64">
+                    <h2 className="text-lg font-semibold flex justify-between items-center text-gray-700 border-b pb-2 mb-4">
                       Advanced Filters{" "}
                       <MdOutlineCancel
                         onClick={toogleFilterbar}
@@ -280,7 +281,7 @@ function Product() {
                     </div>
 
                     {/* Sort By Filter */}
-                    <div className="mb-6">
+                    {/* <div className="mb-6">
                       <h3 className="text-md font-medium text-gray-800 mb-2">
                         Sort By
                       </h3>
@@ -288,7 +289,7 @@ function Product() {
                         <option value="lowToHigh">Price: Low to High</option>
                         <option value="highToLow">Price: High to Low</option>
                       </select>
-                    </div>
+                    </div> */}
 
                     {/* Apply Filters Button */}
                     <button

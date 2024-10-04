@@ -3,14 +3,14 @@ import StarRatings from "react-star-ratings";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-function Products() {
+function Products({productId}) {
   const { products } = useSelector((state) => state.getProducts);
-  console.log(products);
+  
   
   return (
     <Fragment>
       
-      {products.map((product) => {
+      {products.filter((item)=>{return(item._id!==productId)}).map((product) => {
         return (
           <Link
             to={`/product/${product._id}`}

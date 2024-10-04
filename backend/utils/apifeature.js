@@ -1,3 +1,5 @@
+const ErrorHandler = require('../utils/errorHandler')
+
 class ApiFeature {
     constructor(query, queryString) {
         this.query = query;
@@ -50,18 +52,24 @@ class ApiFeature {
     //     return this;
     //   }
       
+
+
+
+
     filter() {
         const queryStringCopy = { ...this.queryString };
-      
+
         // Remove fields that aren't part of filtering
         const deleteFields = ["keyword", "page", "limit"];
         deleteFields.forEach((key) => delete queryStringCopy[key]);
       
         // Handle category filter
+        
         if (this.queryString.categories) {
           
           // Create category filter and store it separately
-          const categoriesArray = this.queryString.categories.split(",").map(cat => cat.trim());
+          const categoriesArray = this.queryString.categories.split(",")
+          // console.log('hello',categoriesArray)
           queryStringCopy.category = {
             $in: categoriesArray,
           };
@@ -84,6 +92,61 @@ class ApiFeature {
       
         return this;
       }
+
+
+
+
+
+
+
+
+  //   filter() {
+  //     const queryStringCopy = { ...this.queryString };
+  
+  //     // Remove fields that aren't part of filtering
+  //     const deleteFields = ["keyword", "page", "limit"];
+  //     deleteFields.forEach((key) => delete queryStringCopy[key]);
+  
+  //     // Handle category filter
+  //     if (this.queryString.categories) {
+  //         const categoriesArray = this.queryString.categories.split(",").map(cat => cat.trim());
+  //         queryStringCopy.category = {
+  //             $in: categoriesArray,
+  //         };
+  //         delete queryStringCopy.categories;
+  //     }
+  
+  //     // Handle rating filter
+  //     if (this.queryString.rating) {
+  //         const ratingValue = this.queryString.rating;
+  //         console.log(ratingValue.gte)
+  //         if (!isNaN(ratingValue.gte)) {
+  //             queryStringCopy.rating = { $gte: ratingValue.gte }; // Assuming you want products with a rating >= given value
+  //         } else {
+  //             throw new ErrorHandler(`Invalid rating: ${this.queryString.rating}`, 400);
+  //         }
+  //         delete queryStringCopy.rating;
+  //     }
+  
+  //     // Convert range filters like price
+  //     let queryStr = JSON.stringify(queryStringCopy);
+  //     queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (match) => `$${match}`);
+  // console.log('final query',queryStr)
+  //     // Apply the filters
+  //     const newquery = JSON.parse(queryStr);
+  
+  //     // Use the final query for MongoDB
+  //     this.query = this.query.find(newquery);
+  
+  //     return this;
+  // }
+  
+
+
+
+
+
+
        
 
     pagination(resultPerPage) {

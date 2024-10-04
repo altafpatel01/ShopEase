@@ -11,7 +11,13 @@ import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import ReviewCard from "./ReviewCard";
 import Loading from "./Loading";
 import ErrorPage from "./ErrorPage";
+import Swal from "sweetalert2";
+import { fetchProducts } from "../Reducers/Reducers";
+import Heading from "./Heading";
+import Products from "./Product";
+import { useNavigate } from "react-router-dom";
 function ProductDetails() {
+  const navigate = useNavigate();
   const NextArrow = (props) => {
     const { onClick } = props;
     return (
@@ -23,7 +29,9 @@ function ProductDetails() {
       </div>
     );
   };
-
+  const navigateTOMore = () => {
+    navigate("/products");
+  };
   const PrevArrow = (props) => {
     const { onClick } = props;
     return (
@@ -37,16 +45,24 @@ function ProductDetails() {
   };
 
   const [quantity, setQuantity] = useState(1);
+  // const [logedin, setlogedin] = useState(false);
   const { id } = useParams();
   const { product, isLoading, error } = useSelector(
     (state) => state.getProductDetails
   );
+  const { products } = useSelector((state) => state.getProducts);
+  console.log(products.length>0)
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
-
+  // const categories = [product.category]
   useEffect(() => {
     dispatch(fetchProductDetails(id));
-  }, [dispatch, id]);
+    const categories = [product.category];
+    if (product.category) {
+      dispatch(fetchProducts({ categories }));
+    }
+  }, [dispatch, id, product.category]);
 
   const settings = {
     dots: true, // Shows navigation dots
@@ -73,7 +89,7 @@ function ProductDetails() {
       ) : (
         <>
           <div className="flex justify-between w-7xl  overflow-x-hidden  mobile:items-center mobile:flex-col mobile:py-0  md:my-10 ">
-            <div className=" mobile:w-[100%] w-[50%] mobile:p-0   h-96 object-contain relative   mobile:mt-0  ">
+            <div className=" mobile:w-[100%] w-[50%] mobile:p-0 overflow-hidden   h-96 object-contain relative   mobile:mt-0  ">
               <Slider
                 className=" w-[50%] mobile:w-[100%] absolute top-[50%] mobile:left-[50%] left-[60%] overflow-y-hidden rounded-md border   translate-x-[-50%]  translate-y-[-50%]"
                 {...settings}
@@ -155,7 +171,18 @@ function ProductDetails() {
                     readOnly
                   />
                   <button
-                    onClick={() =>{if(quantity<product.stock) {setQuantity(quantity + 1)}}}
+                    onClick={() => {
+                      if (quantity < product.stock) {
+                        setQuantity(quantity + 1);
+                      } else if (quantity >= product.stock) {
+                        Swal.fire({
+                          title: "Error!",
+                          text: `The quantity cannot exceed the available stock of ${product.stock}.`,
+                          icon: "error",
+                          confirmButtonText: "OK",
+                        });
+                      }
+                    }}
                     className="border border-blue-800 h-8 w-8 flex justify-center items-center text-blue-800 rounded hover:bg-blue-800 hover:text-white transition duration-200 ease-in-out"
                   >
                     +
@@ -163,10 +190,41 @@ function ProductDetails() {
                 </div>
 
                 {/* Add to Cart Button */}
-                {product&&product.images&&
-                <button onClick={()=>dispatch(addItem({name:product.name,id:product._id,price:product.price,quantity:quantity,image:product.images[0]}))} className="mt-4 mobile:mt-4  block bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300">
-                Add to Cart
-              </button>}
+                {product && product.images && isAuthenticated ? (
+                  <button
+                    onClick={() =>
+                      dispatch(
+                        addItem({
+                          name: product.name,
+                          id: product._id,
+                          price: product.price,
+                          quantity: quantity,
+                          image: product.images[0],
+                          stock: product.stock,
+                        })
+                      )
+                    }
+                    className="mt-4 mobile:mt-4  block bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300"
+                  >
+                    Add to Cart
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      if (!isAuthenticated) {
+                        Swal.fire({
+                          title: "Error!",
+                          text: `Please login first`,
+                          icon: "error",
+                          confirmButtonText: "OK",
+                        });
+                      }
+                    }}
+                    className="mt-4 mobile:mt-4  block bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300"
+                  >
+                    Add to Cart
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -181,6 +239,28 @@ function ProductDetails() {
           </div>
         </>
       )}
+      <div>
+        <div className="max-w-4xl mx-auto">
+          <Heading title={"Similar Products"} level={2} />
+         
+          
+          <div className="flex pt-10 justify-center items-center gap-2 flex-wrap">
+            <Products productId={product._id} />
+          </div>
+          
+        </div>
+        <div className="flex justify-center my-8 "></div>
+        {products.length > 0 
+          ?
+        <button
+          onClick={navigateTOMore}
+          className=" flex justify-center mx-auto bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300"
+        >
+          More Products..
+        </button>:
+          <p className="text-black text-center ">no similar products</p>
+          }
+      </div>
     </Fragment>
   );
 }

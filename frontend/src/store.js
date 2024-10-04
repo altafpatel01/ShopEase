@@ -3,15 +3,16 @@ import productsReducer from "./Reducers/Reducers";
 import ProductDetailReducer from "./Reducers/ProductDetailReducer";
 import userReducer from "./Reducers/userSignupReducer";
 import cartReducer from "./Reducers/cartReducer";
-import  forgotPassword  from "./Reducers/authForgotPassword";
+import forgotPassword from "./Reducers/authForgotPassword";
+import shippingInfo from "./Reducers/shippingInfo";
 const store = configureStore({
   reducer: {
     getProducts: productsReducer,
     getProductDetails: ProductDetailReducer,
-
     user: userReducer,
     cart: cartReducer,
-    forgotPassword:forgotPassword,
+    forgotPassword: forgotPassword,
+    shipping:shippingInfo
   },
 });
 

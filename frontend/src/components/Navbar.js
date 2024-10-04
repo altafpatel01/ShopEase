@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useLocation } from 'react-router-dom';
+import { IoArrowBack } from "react-icons/io5";
 import logo from "../logo.svg";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"; // Import the search icon
 import { Link } from "react-router-dom";
@@ -12,6 +13,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 // import e from 'express';
 const Navbar = () => {
+  const location = useLocation();
   // const history = useHistory();
   const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const { items } = useSelector((state) => state.cart);
@@ -44,10 +46,16 @@ const Navbar = () => {
     <div className="bg-soft-pastel-blue w-7xl z-50">
       <div className=" flex-grow mx-auto px-4  sm:px-6 lg:px-8">
         <div className="flex flex-row justify-evenly h-16 items-center">
-          <div className="flex items-center">
+          <div className="flex relative items-center">
             <div className="shrink-0">
               <img className="h-16 w-16 " src={logo} alt="ShopEase Logo" />
             </div>
+           {location.pathname !== '/' &&(<button
+      onClick={() => navigate(-1)}  // This will navigate to the previous page
+      className="md:bg-gray-100 absolute top-20 md:left-6 left-1 z-50 md:hover:bg-gray-200 md:text-gray-800 font-bold md:py-2 md:px-4 md:rounded-full md:shadow transition duration-300 ease-in-out"
+    >
+      {window.innerWidth<740?<IoArrowBack className="w-5 h-5" />:'Back'}
+    </button>)}
             <div className="hidden md:flex  ">
               <Link
                 to="/"
@@ -114,7 +122,7 @@ const Navbar = () => {
           ) : (
             <>
               <div className="flex gap-5">
-                <button
+               {location.pathname !== '/cart' && ( <button
                   onClick={() => navigate("/cart")}
                   className="text-white mobile:fixed z-50  mobile:bottom-4 mobile:right-4  "
                 >
@@ -124,7 +132,11 @@ const Navbar = () => {
                     </span>
                     <FaShoppingCart className="h-6 w-6 mobile:h-10 mobile:w-10 text-white mobile:text-orange-600  " />
                   </div>
-                </button>
+                </button>)
+
+
+
+}
                 {!userInfo.avatar.url ? (
                   <button className="bg-transparent text-white  rounded-r-md  flex items-center">
                     <FaUser className="h-5 w-5 mobile:h-5 mobile:w-5" />
