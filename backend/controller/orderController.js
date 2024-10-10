@@ -44,7 +44,7 @@ exports.newOrder = asyncHandler(async (req, res, next) => {
     shippingPrice,
     totalPrice,
     paidAt: Date.now(), // Assuming payment is completed during the order creation
-    user: req.user._id, // Assuming user is authenticated
+    user: req.user.id, // Assuming user is authenticated
   });
 
   // // Reduce stock of ordered products
@@ -62,6 +62,7 @@ exports.newOrder = asyncHandler(async (req, res, next) => {
 // get single order
 exports.getSingleOrder = asyncHandler(async(req, res,next)=>{
   const order = await Order.findById(req.params.id).populate('user','name email')
+  console.log(order)
    if(!order){
     return next(new ErrorHandler('order not found',400))
    }
@@ -88,7 +89,7 @@ if(!orders){
 exports.myOrders= asyncHandler(async(req,res,next)=>{
 
   const orders = await Order.find({user:req.user.id})
-
+console.log(orders)
   if(!orders){
     return next(new ErrorHandler("There is no order ",400 ))
   }

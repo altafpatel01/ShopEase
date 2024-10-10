@@ -19,9 +19,13 @@ import ForgotPassword from "./components/forgotPassword.js";
 import ResetPassword from "./components/ResetPassword.js";
 import { initializeCart } from "./Reducers/cartReducer.js";
 import Loader from "./components/Loading.js";
+import Payment from './components/Payment.js'
 // import HorizontalStepper from "./components/HorizontalStepper.js";
 import ShippingPage from "./components/Shipping.js";
 import { initializeShippigInfo } from "./Reducers/shippingInfo.js";
+import ConfirmOrder from "./components/ConfirmOrder.js";
+import Orders from "./components/orders.js";
+import OrderDetails from "./components/OrderDetails.js";
 function App() {
   const dispatch = useDispatch();
   const { userInfo, isAuthenticated, loading } = useSelector(
@@ -51,14 +55,18 @@ function App() {
             )}
             <Route path="/products" element={<Product />} />
             {isAuthenticated && ( <Route path="/shipping" element={<ShippingPage />} />)}
+            {isAuthenticated && ( <Route path="/order/confirm" element={<ConfirmOrder />} />)}
             <Route path="/" exact element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/about" element={<About />} />
             <Route path="/products/:keyword" element={<Product />} />
             {isAuthenticated && <Route path="/cart" element={<Cart />} />}
-            <Route path="/auth/:redirect" element={<AuthForm />} />
+            <Route path="/auth" element={<AuthForm />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
+            {isAuthenticated && <Route path="/proceed/payment" element={<Payment />} />}
+            {isAuthenticated && <Route path="/orders" element={<Orders/>} />}
+            <Route path="/order/:orderId" element={<OrderDetails />} />
           </Routes>
         </Router>
       )}

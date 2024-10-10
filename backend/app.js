@@ -1,6 +1,6 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
-
+const Razorpay = require('razorpay');
 const bodyParser = require('body-parser')
 const productrouter = require('./router/productRoute')
 const userrouter = require('./router/userRouter')

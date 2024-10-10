@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link,useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import { loginUser,resetError } from "../Reducers/userSignupReducer";
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 import Loader from "./Loading";
 
 function Login() {
-    const location = useLocation();
+    // const location = useLocation();
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {loading,error,userInfo,isAuthenticated} = useSelector((state)=>state.user)
@@ -32,18 +32,18 @@ function Login() {
         //     setError(error.response?.data?.message || "Login failed."); // Set error message
         // }
     };
-const redirect = location.pathname ? location.pathname.split('=')[1]:'/account'
+// const redirect = location.pathname ? location.pathname.split('=')[1]:'/account'
     // Logic to hide the eyes when the password is not empty
     useEffect(() => {
         // If user is logged in, navigate to home
         if (isAuthenticated) {
-          navigate(redirect);
+          navigate('/');
         }
         // Optional: Reset error message after displaying it
         if (error) {
           setTimeout(() => dispatch(resetError()), 5000); // Clears error after 5 seconds
         }
-      }, [userInfo, error, navigate, dispatch,isAuthenticated,redirect]);
+      }, [userInfo, error, navigate, dispatch,isAuthenticated]);
 
     return (
         <Fragment>

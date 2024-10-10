@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Container, Box, Typography, Button, Grid, Avatar, Card, CardContent, Divider, TextField } from '@mui/material';
+import { Container, Box, Typography, Button, Avatar, TextField } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import EmailIcon from '@mui/icons-material/Email';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+// import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LogoutIcon from '@mui/icons-material/Logout';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Assuming you're using React Router v6
 import { useDispatch } from 'react-redux';
 import { logout } from '../Reducers/userSignupReducer';
+import {FaShoppingBasket } from 'react-icons/fa';
 
 const ProfilePage = ({ user }) => {
     const dispatch = useDispatch()
@@ -98,27 +99,26 @@ const ProfilePage = ({ user }) => {
         )}
       </Box>
 
-      <Card sx={{ marginTop: 3, padding: 2 }}>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                <EmailIcon sx={{ verticalAlign: 'middle' }} /> Email
-              </Typography>
-              <Typography variant="body1">{user.email}</Typography>
-            </Grid>
+      <div style={{ marginTop: '1rem', padding: '1rem', border: '1px solid #e0e0e0', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+      <div style={{ marginBottom: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
+          <EmailIcon style={{ marginRight: '0.5rem' }} />
+          <h6 style={{ margin: 0 }}>Email</h6>
+        </div>
+        <p>{user.email}</p>
+      </div>
 
-            <Divider sx={{ width: '100%', marginY: 2 }} />
+      <hr style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '1rem 0' }} />
 
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                <LocationOnIcon sx={{ verticalAlign: 'middle' }} /> Location
-              </Typography>
-              <Typography variant="body1">{user.location}</Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+      <div>
+        <div onClick={()=>{navigate('/orders')}} style={{ display: 'flex', alignItems: 'center', marginBottom: '0.5rem' }}>
+          <FaShoppingBasket style={{ marginRight: '0.5rem' }} />
+          <h6 style={{ margin: 0 }}>Orders</h6>
+        </div>
+        <p>{user.location}</p>
+      </div>
+    </div>
+
     </Container>
   );
 };

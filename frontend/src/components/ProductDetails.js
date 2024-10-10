@@ -195,12 +195,13 @@ function ProductDetails() {
                     onClick={() =>
                       dispatch(
                         addItem({
-                          name: product.name,
-                          id: product._id,
+                          name: product.name,                   
                           price: product.price,
                           quantity: quantity,
                           image: product.images[0],
+                          product: product._id,
                           stock: product.stock,
+                          id: product._id,
                         })
                       )
                     }

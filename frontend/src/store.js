@@ -5,6 +5,8 @@ import userReducer from "./Reducers/userSignupReducer";
 import cartReducer from "./Reducers/cartReducer";
 import forgotPassword from "./Reducers/authForgotPassword";
 import shippingInfo from "./Reducers/shippingInfo";
+import order from './Reducers/orderReducer'
+import orderDetailsSlice from './Reducers/orderDetailReducer'
 const store = configureStore({
   reducer: {
     getProducts: productsReducer,
@@ -12,7 +14,9 @@ const store = configureStore({
     user: userReducer,
     cart: cartReducer,
     forgotPassword: forgotPassword,
-    shipping:shippingInfo
+    shipping:shippingInfo,
+    orders:order,
+    orderDetaile:orderDetailsSlice
   },
 });
 

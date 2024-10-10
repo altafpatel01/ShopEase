@@ -18,8 +18,8 @@ function Shipping() {
   const [city, setCity] = useState(info.city||'');
   const [state, setState] = useState(info.state||'');
   const [country, setCountry] = useState(info.country||'');
-  const [pinCode, setPinCode] = useState(info.pinCode||0);
-  const [phoneNo, setPhoneNo] = useState(info.phoneNo||0);
+  const [pinCode, setPinCode] = useState(info.pinCode||'');
+  const [phoneNo, setPhoneNo] = useState(info.phoneNo||'xxxxxxxxxx');
 const {userInfo,isAuthenticated} = useSelector(state=>state.user)
   const shippingSubmit = (e) => {
     e.preventDefault();
@@ -141,7 +141,7 @@ const {userInfo,isAuthenticated} = useSelector(state=>state.user)
             <input 
               type="submit"
               value="Continue"
-              className="shippingBtn w-20 mx-auto focus-visible:hidden rounded-lg text-white py-1 bg-soft-pastel-blue "
+              className="shippingBtn w-28 mx-auto focus-visible:hidden rounded-sm text-white py-1 bg-soft-pastel-blue "
               disabled={state ? false : true}
             />
           </form>

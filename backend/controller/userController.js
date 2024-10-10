@@ -571,3 +571,33 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
         
       });
   })
+
+
+const Razorpay = require('razorpay');
+
+// Initialize Razorpay instance
+// const razorpay = new Razorpay({
+//   key_id: process.env.RAZORPAY_KEY ,  // Use your Razorpay Test Key ID
+//   key_secret: process.env.RAZORPAY_SECRET   // Use your Razorpay Test Key Secret
+// });
+
+// Create a route to generate an order
+exports.payment= asyncHandler(async (req, res) => {
+  const { amount } = req.body;  // Amount should be passed in smallest currency unit, e.g., paise for INR
+  const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY ,  // Use your Razorpay Test Key ID
+    key_secret: process.env.RAZORPAY_SECRET   // Use your Razorpay Test Key Secret
+  });
+  const options = {
+    amount: amount * 100,  // Convert to smallest currency unit
+    currency: 'INR',       // Set currency
+    receipt: 'order_rcptid_11'  // Receipt ID for tracking
+  };
+
+  try {
+    const order = await razorpay.orders.create(options);
+    res.json({ id: order.id });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+})
