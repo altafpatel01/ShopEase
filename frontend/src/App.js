@@ -18,17 +18,19 @@ import Profile from "./components/Profile.js";
 import ForgotPassword from "./components/forgotPassword.js";
 import ResetPassword from "./components/ResetPassword.js";
 import { initializeCart } from "./Reducers/cartReducer.js";
-import Loader from "./components/Loading.js";
-import Payment from './components/Payment.js'
+// import Loader from "./components/Loading.js";
+
 // import HorizontalStepper from "./components/HorizontalStepper.js";
 import ShippingPage from "./components/Shipping.js";
 import { initializeShippigInfo } from "./Reducers/shippingInfo.js";
 import ConfirmOrder from "./components/ConfirmOrder.js";
 import Orders from "./components/orders.js";
 import OrderDetails from "./components/OrderDetails.js";
+
 function App() {
+ 
   const dispatch = useDispatch();
-  const { userInfo, isAuthenticated, loading } = useSelector(
+  const { userInfo, isAuthenticated } = useSelector(
     (state) => state.user
   );
   const id = (isAuthenticated?userInfo._id:0)
@@ -44,9 +46,7 @@ function App() {
 
   return (
     <Fragment>
-      {loading ? (
-        <Loader />
-      ) : (
+     
         <Router>
           <Navbar />
           <Routes>
@@ -64,12 +64,12 @@ function App() {
             <Route path="/auth" element={<AuthForm />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
-            {isAuthenticated && <Route path="/proceed/payment" element={<Payment />} />}
+            
             {isAuthenticated && <Route path="/orders" element={<Orders/>} />}
-            <Route path="/order/:orderId" element={<OrderDetails />} />
+           {isAuthenticated&& <Route path="/order/:orderId" element={<OrderDetails />} />}
           </Routes>
         </Router>
-      )}
+      
     </Fragment>
   );
 }

@@ -7,6 +7,7 @@ import forgotPassword from "./Reducers/authForgotPassword";
 import shippingInfo from "./Reducers/shippingInfo";
 import order from './Reducers/orderReducer'
 import orderDetailsSlice from './Reducers/orderDetailReducer'
+import reviewReducer from "./Reducers/reviewReducer";
 const store = configureStore({
   reducer: {
     getProducts: productsReducer,
@@ -16,7 +17,8 @@ const store = configureStore({
     forgotPassword: forgotPassword,
     shipping:shippingInfo,
     orders:order,
-    orderDetaile:orderDetailsSlice
+    orderDetaile:orderDetailsSlice,
+    reviews: reviewReducer,
   },
 });
 

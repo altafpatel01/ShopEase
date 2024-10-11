@@ -24,7 +24,7 @@ router.get('/admin/getAllUsers',isAuthenticateduser,authorizeRoleBase('Admin'),g
 router.get('/admin/getuser/:id',isAuthenticateduser,authorizeRoleBase('Admin'),getUser)
 router.put('/admin/getuser/:id',isAuthenticateduser,authorizeRoleBase('Admin'),updateUser)
 router.delete('/admin/getuser/:id',isAuthenticateduser,authorizeRoleBase('Admin'),deleteUser)
-router.put('/review',isAuthenticateduser , createReview);
+router.put('/products/:productId/reviews',isAuthenticateduser , createReview);
 router.get('/product/:id/reviews', getProductReviews);
 router.delete('/product/review', isAuthenticateduser, deleteReview);
 router.delete('/delete-account',isAuthenticateduser,deleteAccount)

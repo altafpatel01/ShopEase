@@ -94,17 +94,17 @@ function ConfirmOrder() {
                 popup: "my-custom-popup",
               },
             }).then(() => {
-              navigate("/account");
+              navigate("/orders");
             });
           } else {
             Swal.fire({
               title: "The order is not placed?",
-              text: "refund will be inisiated in 7 working dats",
-              icon: "warning",
+              text: "refund will be inisiated in 7 working days",
+              icon: "success",
               // showCancelButton: true,
-              confirmButtonText: "Yes, delete it!",
+              confirmButtonText: "ok",
               // cancelButtonText: "No, keep it",
-              confirmButtonColor: "#d33",
+              confirmButtonColor: "#green",
               // cancelButtonColor: "#3085d6",
               background: "#fefefe",
               // timer: 5000,
@@ -132,7 +132,7 @@ function ConfirmOrder() {
       console.error("Payment failed:", error);
       Swal.fire({
         title: "Payment is Failed?",
-        text: "if any amount is detected will be refund in 7 working dats",
+        text: "if any amount is detected will be refund in 7 working days",
         icon: "warning",
         // showCancelButton: true,
         confirmButtonText: "Yes, delete it!",
@@ -239,7 +239,7 @@ function ConfirmOrder() {
             <div className=" flex justify-center mb-10 ">
               <button ref={pymbtn}
                 onClick={proceedToPayment}
-                className="bg-soft-pastel-blue rounded-sm text-white transition-all duration-300 ease-in-out hover:text-black px-3 py-1 max-w-44"
+                className="bg-soft-pastel-blue rounded-sm text-white transition-all duration-300 ease-in-out hover:text-black hover:bg-white px-3 py-1 max-w-44"
               >
                 Proceed to Payment
               </button>

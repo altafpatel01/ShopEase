@@ -62,7 +62,7 @@ exports.newOrder = asyncHandler(async (req, res, next) => {
 // get single order
 exports.getSingleOrder = asyncHandler(async(req, res,next)=>{
   const order = await Order.findById(req.params.id).populate('user','name email')
-  console.log(order)
+ 
    if(!order){
     return next(new ErrorHandler('order not found',400))
    }
@@ -73,7 +73,7 @@ exports.getSingleOrder = asyncHandler(async(req, res,next)=>{
    })
 
 })
-
+// get total amount order are requested
 exports.totalValue =asyncHandler(async(req,res ,next)=>{
   const orders = await Order.find()
 if(!orders){
@@ -89,7 +89,7 @@ if(!orders){
 exports.myOrders= asyncHandler(async(req,res,next)=>{
 
   const orders = await Order.find({user:req.user.id})
-console.log(orders)
+
   if(!orders){
     return next(new ErrorHandler("There is no order ",400 ))
   }
@@ -100,7 +100,7 @@ console.log(orders)
 
 })
 
-// get total amount order are requested
+
 
 exports.deleteOrder = asyncHandler(async(req,res)=>{
   const order = await Order.findById(req.params.id).populate('orderItems.product')

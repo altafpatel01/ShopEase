@@ -461,7 +461,9 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 
 // Create or update a review for a product
 exports.createReview = asyncHandler(async (req, res, next) => {
-    const { rating, comment, productId } = req.body;
+console.log(req.params.productId)
+  const productId=req.params.productId
+    const { rating, comment } = req.body;
   
     // Find the product by ID
     const product = await Product.findById(productId);

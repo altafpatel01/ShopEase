@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrderDetails} from '../Reducers/orderDetailReducer';
-// import { toast } from 'react-toastify';
-
+import { fetchOrderDetails,deleteOrder} from '../Reducers/orderDetailReducer';
+import Loader from './Loading';
+import ErrorPage from './ErrorPage';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 const OrderDetails = () => {
   const { orderId } = useParams();
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { order, loading, error } = useSelector((state) => state.orderDetaile);
 
@@ -14,17 +16,33 @@ const OrderDetails = () => {
     dispatch(fetchOrderDetails(orderId));
   }, [dispatch, orderId]);
 
-//   const handleDelete = () => {
-//     dispatch(deleteOrder(orderId))
-//       .then(() => {
-//         toast.success('Order deleted successfully');
-//         navigate('/orders'); // Redirect back to the orders list after deletion
-//       })
-//       .catch((err) => toast.error('Failed to delete order'));
-//   };
+  const handleDelete = () => {
+    dispatch(deleteOrder(orderId))
+      .then(() => {
+        toast.success('Order deleted successfully')
+        Swal.fire({
+            title: "The order is cancle?",
+            text: "refund will be inisiated in 7 working days",
+            icon: "success",
+            // showCancelButton: true,
+            confirmButtonText: "ok",
+            // cancelButtonText: "No, keep it",
+            confirmButtonColor: "#green",
+            // cancelButtonColor: "#3085d6",
+            background: "#fefefe",
+            // timer: 5000,
+            // timerProgressBar: true,
+            customClass: {
+              popup: "my-custom-popup",
+            },
+          });;
+        navigate('/orders'); // Redirect back to the orders list after deletion
+      })
+      .catch((err) => toast.error('Failed to delete order',err));
+  };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <div><Loader/></div>;
+  if (error) return <div><ErrorPage/></div>;
   if (!order) return <div>Order not found.</div>;
 
   return (
@@ -64,7 +82,7 @@ const OrderDetails = () => {
 
         <button
           className="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-        //   onClick={handleDelete}
+          onClick={handleDelete}
         >
           Delete Order
         </button>
