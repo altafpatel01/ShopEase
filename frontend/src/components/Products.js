@@ -15,6 +15,7 @@ import { FaFilter } from "react-icons/fa";
 import { MdOutlineCancel } from "react-icons/md";
 
 function Product() {
+  
   const { keyword } = useParams();
   const [page, setPage] = useState(1);
   const [openFilters, setOpenFilters] = useState(true);
@@ -56,11 +57,12 @@ function Product() {
   };
   const dispatch = useDispatch();
   useEffect(() => {
+    
     dispatch(fetchProducts({ keyword, page }));
   }, [dispatch, keyword, page]);
 
 
-  const { isLoading, error, filtersProductCounts } = useSelector(
+  const { isLoading, error, filtersProductCounts ,products} = useSelector(
     (state) => state.getProducts
   );
 
@@ -74,7 +76,7 @@ function Product() {
             error.message || "An error occurred while fetching products."
           }
         />
-      ) : (
+      ) : (products.length>0?
         <>
           <div className="relative">
             <div className="w-7xl flex pt-7 px-10 mobile:px-0 md:pt-14 justify-center gap-8 ">
@@ -303,7 +305,7 @@ function Product() {
               )}
             </div>
           </div>
-        </>
+        </>:<p className="text-red-600 flex justify-center items-center my-20">No Product Found.</p>
       )}
     </Fragment>
   );

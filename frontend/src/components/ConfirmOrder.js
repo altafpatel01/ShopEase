@@ -7,7 +7,7 @@ import { createOrder } from "../Reducers/orderReducer";
 import Swal from "sweetalert2";
 import { clearCart } from "../Reducers/cartReducer";
 import Loader from "./Loading";
-// import { data } from "autoprefixer";
+
 function ConfirmOrder() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -168,7 +168,7 @@ function ConfirmOrder() {
     <Fragment>
       {loading ? (
         <Loader />
-      ) : (
+      ) : items.length>0?(
         <>
           <div>
             <div className="mt-10">
@@ -246,7 +246,7 @@ function ConfirmOrder() {
             </div>
           </div>
         </>
-      )}{" "}
+      ):<p> </p>}
     </Fragment>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import { IoArrowBack } from "react-icons/io5";
+// import { IoArrowBack } from "react-icons/io5";
 import logo from "../logo.svg";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"; // Import the search icon
 import { Link } from "react-router-dom";
@@ -27,6 +27,7 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
   const handleSearchQuery = (e) => {
+    e.preventDefault()
     setSearchQuery(e.target.value);
   };
   const handleSearch = (e) => {
@@ -50,12 +51,12 @@ const Navbar = () => {
             <div className="shrink-0">
               <img className="h-16 w-16 " src={logo} alt="ShopEase Logo" />
             </div>
-           {location.pathname !== '/' &&(<button
+           {/* {location.pathname !== '/' &&(<button
       onClick={() => navigate(-1)}  // This will navigate to the previous page
       className="md:bg-gray-100 absolute top-20 md:left-6 left-1 z-50 md:hover:bg-gray-200 md:text-gray-800 font-bold md:py-2 md:px-4 md:rounded-full md:shadow transition duration-300 ease-in-out"
     >
       {window.innerWidth<740?<IoArrowBack className="w-5 h-5" />:'Back'}
-    </button>)}
+    </button>)} */}
             <div className="hidden md:flex  ">
               <Link
                 to="/"

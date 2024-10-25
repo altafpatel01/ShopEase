@@ -582,7 +582,7 @@ const userSlice = createSlice({
       })
       .addCase(loadUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload.message;
+        state.error = null;
         state.isAuthenticated = false;
       })
       // Logout user
@@ -592,7 +592,7 @@ const userSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.loading = false;
-        state.userInfo = null;
+        state.userInfo = '';
         state.isAuthenticated = false;
         state.message = action.payload.message;
       })

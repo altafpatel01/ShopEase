@@ -26,6 +26,7 @@ import { initializeShippigInfo } from "./Reducers/shippingInfo.js";
 import ConfirmOrder from "./components/ConfirmOrder.js";
 import Orders from "./components/orders.js";
 import OrderDetails from "./components/OrderDetails.js";
+import Contact from "./components/Contact.js";
 
 function App() {
  
@@ -59,6 +60,7 @@ function App() {
             <Route path="/" exact element={<Home />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/products/:keyword" element={<Product />} />
             {isAuthenticated && <Route path="/cart" element={<Cart />} />}
             <Route path="/auth" element={<AuthForm />} />
