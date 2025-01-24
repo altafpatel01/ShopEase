@@ -6,7 +6,7 @@ export const forgotPassword = createAsyncThunk(
   'auth/forgotPassword',
   async (emailData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/forgot-password`, emailData); // Adjust API path as per your backend
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/forgot-password`, emailData,{ withCredentials: true }); // Adjust API path as per your backend
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data.message || 'Failed to send reset link');
@@ -18,7 +18,7 @@ export const resetPassword = createAsyncThunk(
     async (formdata, { rejectWithValue }) => {
       try {
     
-        const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/v1/reset-password/${formdata.token.token}`,formdata, { headers: {'Content-Type': 'application/json' }})// Adjust API path as per your backend
+        const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/v1/reset-password/${formdata.token.token}`,formdata, { headers: {'Content-Type': 'application/json' }, withCredentials: true })// Adjust API path as per your backend
         return response.data;
       } catch (error) {
         return rejectWithValue(error.response.data.message || 'Failed to send reset link');

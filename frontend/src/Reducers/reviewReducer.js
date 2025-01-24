@@ -9,6 +9,7 @@ export const submitReview = createAsyncThunk(
       const config = {
         headers: {
           "Content-Type": "application/json",
+           withCredentials: true ,
         },
         withCredentials: true, // To send cookies with the request for authentication
       };

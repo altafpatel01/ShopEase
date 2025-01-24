@@ -14,7 +14,7 @@ export const fetchProducts = createAsyncThunk(
         link +=`&categories=${categories.join(",")}`; // Join selected categories into a comma-separated string
         
       }
-      const response = await axios.get(link)
+      const response = await axios.get(link,{ withCredentials: true })
       return response.data
     } catch (error) {
       // Throw a new error to be handled by the extraReducers

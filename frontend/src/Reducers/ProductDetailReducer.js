@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export const fetchProductDetails = createAsyncThunk('product/fetchProductsDetails', async (id) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/product/${id}`); // Adjust the URL as necessary
+    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/product/${id}`,{ withCredentials: true }); // Adjust the URL as necessary
     return response.data; // Return the product directly
   } catch (error) {
     // Throw a new error to be handled by the extraReducers

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchOrderDetails = createAsyncThunk('orders/fetchOrderDetails', async (orderId, { rejectWithValue }) => {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/order/${orderId}`);
+    const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/order/${orderId}`,{ withCredentials: true });
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -14,7 +14,7 @@ export const deleteOrder = createAsyncThunk(
     'orders/deleteOrder',
     async (orderId, { rejectWithValue }) => {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/v1/orders/${orderId}`);
+        await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/api/v1/orders/${orderId}`,{ withCredentials: true });
       } catch (error) {
         return rejectWithValue(error.response.data);
       }
