@@ -13,7 +13,7 @@ export const submitReview = createAsyncThunk(
         withCredentials: true, // To send cookies with the request for authentication
       };
       const response = await axios.put(
-        `/api/v1/products/${productId}/reviews`,
+        `${process.env.REACT_APP_API_BASE_URL}/api/v1/products/${productId}/reviews`,
         reviewData,
         config
       );

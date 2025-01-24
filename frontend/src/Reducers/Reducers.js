@@ -9,7 +9,7 @@ export const fetchProducts = createAsyncThunk(
     try {
      
     
-      let link =`/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${priceRange[0]}&price[lte]=${priceRange[1]}&rating[gte]=${rating}`
+      let link =`${process.env.REACT_APP_API_BASE_URL}/api/v1/products?keyword=${keyword}&page=${page}&price[gte]=${priceRange[0]}&price[lte]=${priceRange[1]}&rating[gte]=${rating}`
       if (categories.length > 0) {
         link +=`&categories=${categories.join(",")}`; // Join selected categories into a comma-separated string
         

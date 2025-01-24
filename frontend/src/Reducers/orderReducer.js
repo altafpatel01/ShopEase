@@ -6,7 +6,7 @@ export const createOrder = createAsyncThunk(
   'order/createOrder',
   async (orderData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/v1/newOrder', orderData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/newOrder`, orderData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -19,7 +19,7 @@ export const fetchOrders = createAsyncThunk(
   'order/fetchOrders',
   async () => {
     try {
-      const response = await axios.get('/api/v1/orders');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/orders`);
       return response.data;
     } catch (error) {
       return error;

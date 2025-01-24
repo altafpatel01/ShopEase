@@ -417,7 +417,7 @@ export const signupUser = createAsyncThunk(
   'user/signup',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/v1/register', userData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/register`, userData);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || { message: err.message });
@@ -429,7 +429,7 @@ export const verifyEmail = createAsyncThunk(
   'user/verifyEmail',
   async ({ email, otp }, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/v1/verify', { email, otp });
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/verify`, { email, otp });
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || { message: err.message });
@@ -441,7 +441,7 @@ export const resendOtp = createAsyncThunk(
   'user/resendOtp',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/v1/resendOtp', userData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/resendOtp`, userData);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || { message: err.message });
@@ -453,7 +453,7 @@ export const loginUser = createAsyncThunk(
   'user/login',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/api/v1/login', userData);
+      const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/login`, userData);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || { message: err.message });
@@ -465,7 +465,7 @@ export const loadUser = createAsyncThunk(
   'user/loadUser',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/api/v1/me');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/me`);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || { message: err.message });
@@ -477,7 +477,7 @@ export const logout = createAsyncThunk(
   'user/logout',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('/api/v1/logout');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/logout`);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || { message: err.message });

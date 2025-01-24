@@ -1,25 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-// import { IoArrowBack } from "react-icons/io5";
+
 import logo from "../logo.svg";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa"; // Import the search icon
 import { Link } from "react-router-dom";
-// import { fetchProducts } from '../Reducers/Reducers';
-// import { fetchProducts } from "../Reducers/Reducers";
-// import { useHistory } from 'react-router-dom';
 
-// import { fetchSearchProducts } from "../Reducers/searchProduct";
 import { useSelector } from "react-redux";
-// import e from 'express';
+
 const Navbar = () => {
   const location = useLocation();
-  // const history = useHistory();
+  
   const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const { items } = useSelector((state) => state.cart);
   const navigate = useNavigate();
 
-  // const dispatch = useDispatch();
+  
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -31,16 +27,12 @@ const Navbar = () => {
     setSearchQuery(e.target.value);
   };
   const handleSearch = (e) => {
-    // e.preventDefault();
-    // Handle search logic here
+  
     if (searchQuery.trim()) {
       navigate(`/products/${searchQuery}`);
     } else {
       navigate(`/products`);
-      // dispatch(fetchSearchProducts(trimsearchQuery));
-      // dispatch(fetchProducts({trimsearchQuery}))
 
-      // Place your search logic here
     }
   };
   return (
@@ -51,12 +43,7 @@ const Navbar = () => {
             <div className="shrink-0">
               <img className="h-16 w-16 " src={logo} alt="ShopEase Logo" />
             </div>
-           {/* {location.pathname !== '/' &&(<button
-      onClick={() => navigate(-1)}  // This will navigate to the previous page
-      className="md:bg-gray-100 absolute top-20 md:left-6 left-1 z-50 md:hover:bg-gray-200 md:text-gray-800 font-bold md:py-2 md:px-4 md:rounded-full md:shadow transition duration-300 ease-in-out"
-    >
-      {window.innerWidth<740?<IoArrowBack className="w-5 h-5" />:'Back'}
-    </button>)} */}
+          
             <div className="hidden md:flex  ">
               <Link
                 to="/"
@@ -113,12 +100,7 @@ const Navbar = () => {
               >
                 Login/Signup
               </Link>
-              {/* <Link
-                to="/signup"
-                className="text-white hover:bg-white hover:text-gray-800 transition-all duration-400 ease-in-out px-1 py-1 rounded-md text-sm font-medium"
-              >
-                SignUp
-              </Link> */}
+             
             </div>
           ) : (
             <>

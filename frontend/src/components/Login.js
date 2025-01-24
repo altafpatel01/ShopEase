@@ -22,18 +22,9 @@ function Login() {
         e.preventDefault()
         dispatch(loginUser({email,password}))
        
-        // e.preventDefault(); // Prevent form submission
-        // try {
-        //     const { data } = await axios.post("/api/v1/login", { email, password });
-        //     console.log(data);
-        //     navigate("/");
-        // } catch (error) {
-        //     console.log(error);
-        //     setError(error.response?.data?.message || "Login failed."); // Set error message
-        // }
+      
     };
-// const redirect = location.pathname ? location.pathname.split('=')[1]:'/account'
-    // Logic to hide the eyes when the password is not empty
+
     useEffect(() => {
         // If user is logged in, navigate to home
         if (isAuthenticated) {
