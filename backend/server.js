@@ -1,4 +1,11 @@
 const app = require("./app");
+const cors = require('cors');
+app.use(
+  cors({
+    origin: 'https://ShopEase.vercel.app', // Replace with your Vercel frontend URL
+    credentials: true, // If using cookies or other credentials
+  })
+);
 const cloudinary = require('cloudinary')
 require("dotenv").config({ path: "backend/config/config.env" });
 process.on("uncaughtException", (error) => {
