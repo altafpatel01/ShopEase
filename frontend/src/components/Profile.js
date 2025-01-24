@@ -36,6 +36,7 @@ const ProfilePage = ({ user }) => {
     try {
       const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/v1/update-profile`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
       });
       window.location.reload();
       console.log('Profile updated:', response.data);
