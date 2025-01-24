@@ -11,7 +11,7 @@ const app = express()
 const cors = require('cors');
 app.use(
   cors({
-    origin: 'https://shopease-oomg.onrender.com', // Replace with your Vercel frontend URL
+    origin: 'https://shopease.vercel.app', // Replace with your Vercel frontend URL
     credentials: true, // If using cookies or other credentials
   })
 );
