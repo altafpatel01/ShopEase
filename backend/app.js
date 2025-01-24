@@ -8,6 +8,13 @@ const orderrouter = require('./router/orderRouter')
 const fileUpload = require('express-fileupload');
 const errorss = require('./middleware/errors')
 const app = express()
+const cors = require('cors');
+app.use(
+  cors({
+    origin: 'https://shopease-oomg.onrender.com', // Replace with your Vercel frontend URL
+    credentials: true, // If using cookies or other credentials
+  })
+);
 app.use(cookieParser())
 app.use(express.json())
 app.use(bodyParser.json())
