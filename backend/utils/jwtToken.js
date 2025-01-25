@@ -7,6 +7,7 @@ const jwtTOken = (user,statusCode,res)=>{
             Date.now() + process.env.COOKIES_EXPIRES*24*60*60*1000
         ),
         httpOnly:true,
+        secure:true,
         sameSite: 'None',
     }
     res.status(statusCode).cookie('token',token,options).json({
