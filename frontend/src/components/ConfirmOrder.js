@@ -39,9 +39,11 @@ function ConfirmOrder() {
   const handlePayment = async () => {
     try {
       // Call backend to create an order
-      const { data } = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/payment`, {
+      const { data } = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/v1/payment`,
+         {
         amount: totalAmount,
-      },{ withCredentials: true });
+        },
+      { withCredentials: true });
       console.log(data);
       // Payment options
       const options = {
